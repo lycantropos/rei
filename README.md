@@ -1,7 +1,7 @@
 rei
 ===
 
-[![](https://dev.azure.com/lycantropos/rei/_apis/build/status/lycantropos.rei?branchName=master)](https://dev.azure.com/lycantropos/rei/_build/latest?branchName=master "Azure Pipelines")
+[![](https://dev.azure.com/lycantropos/rei/_apis/build/status/lycantropos.rei?branchName=master)](https://dev.azure.com/lycantropos/rei/_build/latest?definitionId=35&branchName=master "Azure Pipelines")
 [![](https://codecov.io/gh/lycantropos/rei/branch/master/graph/badge.svg)](https://codecov.io/gh/lycantropos/rei "Codecov")
 [![](https://img.shields.io/github/license/lycantropos/rei.svg)](https://github.com/lycantropos/rei/blob/master/LICENSE "License")
 [![](https://badge.fury.io/py/rei.svg)](https://badge.fury.io/py/rei "PyPI")
