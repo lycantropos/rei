@@ -118,8 +118,9 @@ if platform.python_implementation() == 'CPython':
     parameters.update(
             cmdclass={'build_ext': BuildExt},
             ext_modules=[Extension('_' + rei.__name__,
-                                   glob('src/*.cpp'),
-                                   include_dirs=[LazyPybindInclude()],
+                                   glob('src/*.cpp') + glob('include/**/*.cc'),
+                                   include_dirs=[LazyPybindInclude(),
+                                                 Path.cwd() / 'include'],
                                    language='c++')],
             zip_safe=False)
 setup(**parameters)

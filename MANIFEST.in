@@ -1,3 +1,5 @@
 include LICENSE
 include requirements-setup.txt
 include requirements.txt
+recursive-include include *.cc *.h
+recursive-include src *.cpp
