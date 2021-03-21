@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  rei-cpython:
+    build:
+      context: .
+      args:
+        - IMAGE_NAME=${CPYTHON_IMAGE_NAME}
+        - IMAGE_VERSION=${CPYTHON_IMAGE_VERSION}
+    image: lycantropos/rei-cpython:0.0.0
+    volumes:
+      - ./pytest.ini:/opt/rei/pytest.ini
+      - ./README.md:/opt/rei/README.md
+      - ./rei:/opt/rei/rei
+      - ./requirements-setup.txt:/opt/rei/requirements-setup.txt
+      - ./requirements-tests.txt:/opt/rei/requirements-tests.txt
+      - ./requirements.txt:/opt/rei/requirements.txt
+      - ./setup.py:/opt/rei/setup.py
+      - ./src:/opt/rei/src
+      - ./tests:/opt/rei/tests
+    entrypoint: pytest
