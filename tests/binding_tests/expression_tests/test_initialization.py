@@ -1,6 +1,6 @@
 from hypothesis import given
 
-from tests.hints import BoundExpression
+from tests.binding_tests.hints import BoundExpression
 from . import strategies
 
 
