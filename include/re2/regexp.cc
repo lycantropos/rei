@@ -5,6 +5,12 @@
 // Regular expression representation.
 // Tested by parse_test.cc
 
+#ifdef _WIN32
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#endif
+
 #include "re2/regexp.h"
 
 #include <stddef.h>
