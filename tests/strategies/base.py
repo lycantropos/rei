@@ -43,3 +43,5 @@ def to_repeated_patterns(strategy: Strategy[str]) -> Strategy[str]:
 patterns = (unrepeated_patterns
             | to_repeated_patterns(unrepeated_patterns.filter(bool)))
 patterns |= strategies.tuples(patterns, patterns).map(pack('{}|{}'.format))
+patterns |= patterns.map('^{}'.format)
+patterns |= patterns.map('{}$'.format)
