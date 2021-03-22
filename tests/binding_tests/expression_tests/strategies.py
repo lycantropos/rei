@@ -8,7 +8,8 @@ patterns_special_characters = ['+', '*', '?', '^', '(', ')', '[', ']', '{',
                                '}', '|', '\\']
 escape_special_character = '\\{}'.format
 exact_patterns = strategies.text(
-        strategies.characters(blacklist_characters=patterns_special_characters)
+        strategies.characters(blacklist_characters=patterns_special_characters,
+                              blacklist_categories=['Cs'])
         | (strategies.sampled_from(patterns_special_characters)
            .map(escape_special_character)))
 non_empty_exact_patterns = exact_patterns.filter(bool)
