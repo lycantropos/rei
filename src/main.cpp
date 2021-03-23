@@ -2,6 +2,8 @@
 #include <re2/re2.h>
 #include <util/utf.h>
 
+#include <numeric>
+#include <sstream>
 #include <string>
 
 namespace py = pybind11;
@@ -51,6 +53,39 @@ class Rune {
   re2::Rune _raw;
 };
 
+template <class Object>
+std::string repr(const Object& object) {
+  std::ostringstream stream;
+  stream.precision(std::numeric_limits<double>::digits10 + 2);
+  stream << object;
+  return stream.str();
+}
+
+template <class Iterable>
+static std::string join(const Iterable& elements,
+                        const std::string& separator) {
+  const auto begin = std::begin(elements);
+  const auto end = std::end(elements);
+  if (begin == end) return std::string();
+  return std::accumulate(
+      std::next(begin), end, std::string(*begin),
+      [&separator](const std::string& result,
+                   const typename Iterable::value_type& value) {
+        return result + separator + std::string(value);
+      });
+};
+
+static std::ostream& operator<<(std::ostream& stream, const py::bytes& bytes) {
+  std::vector<py::str> components;
+  for (auto byte : py::iter(bytes)) components.push_back(py::str(byte));
+  return stream << "bytes([" << join(components, ", ") << "])";
+}
+
+static std::ostream& operator<<(std::ostream& stream, const Rune& rune) {
+  return stream << C_STR(MODULE_NAME) "." RUNE_NAME "(" << rune.components()
+                << ")";
+}
+
 PYBIND11_MODULE(MODULE_NAME, m) {
   m.doc() = R"pbdoc(Python binding of `re2` C++ library.)pbdoc";
   m.attr("__version__") = C_STR(VERSION_INFO);
@@ -58,10 +93,10 @@ PYBIND11_MODULE(MODULE_NAME, m) {
   py::class_<Rune>(m, RUNE_NAME)
       .def(py::init<const py::bytes&>(), py::arg("components"))
       .def("__bool__", &Rune::operator bool)
-      .def("__iter__", [](const Rune& self) {
-        return py::iter(self.components());
-      })
+      .def("__iter__",
+           [](const Rune& self) { return py::iter(self.components()); })
       .def("__len__", &Rune::size)
+      .def("__repr__", repr<Rune>)
       .def("__str__", &Rune::operator py::str);
 
   py::class_<Expression>(m, EXPRESSION_NAME)
