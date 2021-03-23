@@ -8,5 +8,4 @@ from . import strategies
 def test_initialization(components: bytes) -> None:
     result = BoundRune(components)
 
-    assert len(result) == len(components)
-    assert bytes(result) == components
+    assert result.components == components
