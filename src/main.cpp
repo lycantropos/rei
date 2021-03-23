@@ -101,7 +101,8 @@ PYBIND11_MODULE(MODULE_NAME, m) {
            [](const Rune& self) { return py::iter(self.components()); })
       .def("__len__", &Rune::size)
       .def("__repr__", repr<Rune>)
-      .def("__str__", &Rune::operator py::str);
+      .def("__str__", &Rune::operator py::str)
+      .def_property_readonly("components", &Rune::components);
 
   py::class_<Expression>(m, EXPRESSION_NAME)
       .def(py::init([](const std::string& pattern) {
