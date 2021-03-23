@@ -5,8 +5,8 @@ from . import strategies
 
 
 @given(strategies.bytes_sequences)
-def test_initialization(characters: bytes) -> None:
-    result = BoundRune(characters)
+def test_initialization(components: bytes) -> None:
+    result = BoundRune(components)
 
-    assert len(result) == len(characters)
-    assert bytes(result) == characters
+    assert len(result) == len(components)
+    assert bytes(result) == components
