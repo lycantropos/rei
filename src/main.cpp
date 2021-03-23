@@ -18,8 +18,8 @@ namespace py = pybind11;
 using Expression = re2::RE2;
 class Rune {
  public:
-  Rune(const py::bytes& characters) {
-    re2::chartorune(&_raw, std::string(characters).c_str());
+  Rune(const py::bytes& components) {
+    re2::chartorune(&_raw, std::string(components).c_str());
   }
 
   operator bool() const { return _raw != re2::Runeerror; }
@@ -39,7 +39,7 @@ class Rune {
     return result;
   }
 
-  py::bytes characters() const {
+  py::bytes components() const {
     char* c_string = new char[re2::UTFmax]();
     int size = re2::runetochar(c_string, &_raw);
     py::bytes result(c_string, size);
@@ -56,10 +56,10 @@ PYBIND11_MODULE(MODULE_NAME, m) {
   m.attr("__version__") = C_STR(VERSION_INFO);
 
   py::class_<Rune>(m, RUNE_NAME)
-      .def(py::init<const py::bytes&>(), py::arg("characters"))
+      .def(py::init<const py::bytes&>(), py::arg("components"))
       .def("__bool__", &Rune::operator bool)
       .def("__iter__", [](const Rune& self) {
-        return py::iter(self.characters());
+        return py::iter(self.components());
       })
       .def("__len__", &Rune::size)
       .def("__str__", &Rune::operator py::str);
