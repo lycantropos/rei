@@ -1,3 +1,4 @@
 from hypothesis import strategies
 
-bytes_sequences = strategies.characters().map(str.encode)
+bytes_sequences = (strategies.characters(blacklist_categories=['Cs'])
+                   .map(str.encode))
