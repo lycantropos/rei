@@ -26,8 +26,8 @@ class Rune {
 
   operator py::str() const {
     char* c_string = new char[re2::UTFmax]();
-    int length = re2::runetochar(c_string, &_raw);
-    py::str result(c_string, length);
+    int size = re2::runetochar(c_string, &_raw);
+    py::str result(c_string, size);
     delete[] c_string;
     return result;
   }
@@ -35,6 +35,14 @@ class Rune {
   int size() const {
     char* c_string = new char[re2::UTFmax]();
     int result = re2::runetochar(c_string, &_raw);
+    delete[] c_string;
+    return result;
+  }
+
+  py::bytes characters() const {
+    char* c_string = new char[re2::UTFmax]();
+    int size = re2::runetochar(c_string, &_raw);
+    py::bytes result(c_string, size);
     delete[] c_string;
     return result;
   }
@@ -50,6 +58,9 @@ PYBIND11_MODULE(MODULE_NAME, m) {
   py::class_<Rune>(m, RUNE_NAME)
       .def(py::init<const py::bytes&>(), py::arg("characters"))
       .def("__bool__", &Rune::operator bool)
+      .def("__iter__", [](const Rune& self) {
+        return py::iter(self.characters());
+      })
       .def("__len__", &Rune::size)
       .def("__str__", &Rune::operator py::str);
 
