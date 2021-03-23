@@ -1,3 +1,4 @@
+#include <pybind11/operators.h>
 #include <pybind11/pybind11.h>
 #include <re2/re2.h>
 #include <util/utf.h>
@@ -23,6 +24,8 @@ class Rune {
   Rune(const py::bytes& components) {
     re2::chartorune(&_raw, std::string(components).c_str());
   }
+
+  bool operator==(const Rune& other) const { return _raw == other._raw; }
 
   operator bool() const { return _raw != re2::Runeerror; }
 
@@ -92,6 +95,7 @@ PYBIND11_MODULE(MODULE_NAME, m) {
 
   py::class_<Rune>(m, RUNE_NAME)
       .def(py::init<const py::bytes&>(), py::arg("components"))
+      .def(py::self == py::self)
       .def("__bool__", &Rune::operator bool)
       .def("__iter__",
            [](const Rune& self) { return py::iter(self.components()); })
