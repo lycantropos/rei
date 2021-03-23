@@ -32,6 +32,13 @@ class Rune {
     return result;
   }
 
+  int size() const {
+    char* c_string = new char[re2::UTFmax]();
+    int result = re2::runetochar(c_string, &_raw);
+    delete[] c_string;
+    return result;
+  }
+
  private:
   re2::Rune _raw;
 };
@@ -43,6 +50,7 @@ PYBIND11_MODULE(MODULE_NAME, m) {
   py::class_<Rune>(m, RUNE_NAME)
       .def(py::init<const py::bytes&>(), py::arg("characters"))
       .def("__bool__", &Rune::operator bool)
+      .def("__len__", &Rune::size)
       .def("__str__", &Rune::operator py::str);
 
   py::class_<Expression>(m, EXPRESSION_NAME)
