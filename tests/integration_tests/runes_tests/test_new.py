@@ -1,8 +1,8 @@
 from hypothesis import given
 
-from tests.utils import (BoundRune,
-                         PortedRune,
-                         are_bound_ported_runes_equivalent)
+from tests.binding_tests.hints import BoundRune
+from tests.integration_tests.utils import are_bound_ported_runes_equivalent
+from tests.port_tests.hints import PortedRune
 from . import strategies
 
 

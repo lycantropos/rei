@@ -4,23 +4,12 @@ from typing import (Callable,
                     Tuple,
                     TypeVar)
 
-from _rei import Rune as BoundRune
-
-from rei.rune import Rune as PortedRune
-
-BoundRune = BoundRune
-PortedRune = PortedRune
 _T1 = TypeVar('_T1')
 _T2 = TypeVar('_T2')
 
 
 def apply(function: Callable[..., _T2], args: Iterable[_T1]) -> _T2:
     return function(*args)
-
-
-def are_bound_ported_runes_equivalent(bound: BoundRune,
-                                      ported: PortedRune) -> bool:
-    return bound.components == ported.components
 
 
 def equivalence(left_statement: bool, right_statement: bool) -> bool:
