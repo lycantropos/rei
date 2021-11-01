@@ -1,7 +1,7 @@
 import enum
 
 
-class ParseFlags(enum.IntFlag):
+class ParseFlag(enum.IntFlag):
     NO_PARSE_FLAGS = 0
     FOLD_CASE = 1 << 0
     LITERAL = 1 << 1
