@@ -1,6 +1,7 @@
 #include <pybind11/operators.h>
 #include <pybind11/pybind11.h>
 #include <re2/re2.h>
+#include <re2/regexp.h>
 #include <util/utf.h>
 
 #include <numeric>
@@ -13,12 +14,14 @@ namespace py = pybind11;
 #define C_STR_HELPER(a) #a
 #define C_STR(a) C_STR_HELPER(a)
 #define EXPRESSION_NAME "Expression"
+#define PARSE_FLAG_NAME "ParseFlag"
 #define RUNE_NAME "Rune"
 #ifndef VERSION_INFO
 #define VERSION_INFO "dev"
 #endif
 
 using Expression = re2::RE2;
+using ParseFlag = re2::Regexp::ParseFlags;
 class Rune {
  public:
   Rune(const py::bytes& components) {
@@ -92,6 +95,27 @@ static std::ostream& operator<<(std::ostream& stream, const Rune& rune) {
 PYBIND11_MODULE(MODULE_NAME, m) {
   m.doc() = R"pbdoc(Python binding of `re2` C++ library.)pbdoc";
   m.attr("__version__") = C_STR(VERSION_INFO);
+
+  py::enum_<ParseFlag>(m, PARSE_FLAG_NAME)
+      .value("NO_PARSE_FLAGS", ParseFlag::NoParseFlags)
+      .value("FOLD_CASE", ParseFlag::FoldCase)
+      .value("LITERAL", ParseFlag::Literal)
+      .value("CLASS_NL", ParseFlag::ClassNL)
+      .value("DOT_NL", ParseFlag::DotNL)
+      .value("MATCH_NL", ParseFlag::MatchNL)
+      .value("ONE_LINE", ParseFlag::OneLine)
+      .value("LATIN1", ParseFlag::Latin1)
+      .value("NON_GREEDY", ParseFlag::NonGreedy)
+      .value("PERL_CLASSES", ParseFlag::PerlClasses)
+      .value("PERL_B", ParseFlag::PerlB)
+      .value("PERL_X", ParseFlag::PerlX)
+      .value("UNICODE_GROUPS", ParseFlag::UnicodeGroups)
+      .value("NEVER_NL", ParseFlag::NeverNL)
+      .value("NEVER_CAPTURE", ParseFlag::NeverCapture)
+      .value("LIKE_PERL", ParseFlag::LikePerl)
+      .value("WAS_DOLLAR", ParseFlag::WasDollar)
+      .value("ALL_PARSEFLAGS", ParseFlag::AllParseFlags)
+      .export_values();
 
   py::class_<Rune>(m, RUNE_NAME)
       .def(py::init<const py::bytes&>(), py::arg("components"))
