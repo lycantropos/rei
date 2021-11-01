@@ -114,7 +114,7 @@ PYBIND11_MODULE(MODULE_NAME, m) {
       .value("NEVER_CAPTURE", ParseFlag::NeverCapture)
       .value("LIKE_PERL", ParseFlag::LikePerl)
       .value("WAS_DOLLAR", ParseFlag::WasDollar)
-      .value("ALL_PARSEFLAGS", ParseFlag::AllParseFlags)
+      .value("ALL_PARSE_FLAGS", ParseFlag::AllParseFlags)
       .export_values();
 
   py::class_<Rune>(m, RUNE_NAME)
