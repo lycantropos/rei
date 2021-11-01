@@ -34,7 +34,7 @@ parameters = dict(
         ],
         url=project_base_url,
         download_url=project_base_url + 'archive/master.zip',
-        python_requires='>=3.5',
+        python_requires='>=3.6',
         setup_requires=read_file('requirements-setup.txt'),
         install_requires=read_file('requirements.txt'))
 if platform.python_implementation() == 'CPython':
