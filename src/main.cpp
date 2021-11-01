@@ -124,8 +124,7 @@ PYBIND11_MODULE(MODULE_NAME, m) {
       .value("END_TEXT", Operation::kRegexpEndText)
       .value("CHAR_CLASS", Operation::kRegexpCharClass)
       .value("HAVE_MATCH", Operation::kRegexpHaveMatch)
-      .value("MAX_OPERATION", Operation::kMaxRegexpOp)
-      .export_values();
+      .value("MAX_OPERATION", Operation::kMaxRegexpOp);
 
   py::enum_<ParseFlag>(m, PARSE_FLAG_NAME)
       .value("NO_PARSE_FLAGS", ParseFlag::NoParseFlags)
@@ -145,8 +144,7 @@ PYBIND11_MODULE(MODULE_NAME, m) {
       .value("NEVER_CAPTURE", ParseFlag::NeverCapture)
       .value("LIKE_PERL", ParseFlag::LikePerl)
       .value("WAS_DOLLAR", ParseFlag::WasDollar)
-      .value("ALL_PARSE_FLAGS", ParseFlag::AllParseFlags)
-      .export_values();
+      .value("ALL_PARSE_FLAGS", ParseFlag::AllParseFlags);
 
   py::class_<Rune>(m, RUNE_NAME)
       .def(py::init<const py::bytes&>(), py::arg("components"))
@@ -174,8 +172,7 @@ PYBIND11_MODULE(MODULE_NAME, m) {
       .value("REPEAT_OP", StatusCode::kRegexpRepeatOp)
       .value("BAD_PERL_OP", StatusCode::kRegexpBadPerlOp)
       .value("BAD_UTF8", StatusCode::kRegexpBadUTF8)
-      .value("BAD_NAMED_CAPTURE", StatusCode::kRegexpBadNamedCapture)
-      .export_values();
+      .value("BAD_NAMED_CAPTURE", StatusCode::kRegexpBadNamedCapture);
 
   py::class_<Expression>(m, EXPRESSION_NAME)
       .def(py::init([](const std::string& pattern) {
