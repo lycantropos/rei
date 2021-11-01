@@ -17,3 +17,20 @@ class StatusCode(enum.IntEnum):
     BAD_PERL_OP = enum.auto()
     BAD_UTF8 = enum.auto()
     BAD_NAMED_CAPTURE = enum.auto()
+
+    def __str__(self) -> str:
+        return ['no error',
+                'unexpected error',
+                'invalid escape sequence',
+                'invalid character class',
+                'invalid character class range',
+                'missing ]',
+                'missing )',
+                'unexpected )',
+                'trailing \\',
+                'no argument for repetition operator',
+                'invalid repetition size',
+                'bad repetition operator',
+                'invalid perl operator',
+                'invalid UTF-8',
+                'invalid named capture group'][self.value]
