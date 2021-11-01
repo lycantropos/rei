@@ -157,8 +157,8 @@ PYBIND11_MODULE(MODULE_NAME, m) {
       .def("__str__", &Rune::operator py::str)
       .def_property_readonly("components", &Rune::components);
 
-  py::enum_<StatusCode>(m, STATUS_CODE_NAME)
-      .value("SUCCESS", StatusCode::kRegexpSuccess)
+  py::enum_<StatusCode> PyStatusCode(m, STATUS_CODE_NAME);
+  PyStatusCode.value("SUCCESS", StatusCode::kRegexpSuccess)
       .value("INTERNAL_ERROR", StatusCode::kRegexpInternalError)
       .value("BAD_ESCAPE", StatusCode::kRegexpBadEscape)
       .value("BAD_CHAR_CLASS", StatusCode::kRegexpBadCharClass)
@@ -173,6 +173,8 @@ PYBIND11_MODULE(MODULE_NAME, m) {
       .value("BAD_PERL_OP", StatusCode::kRegexpBadPerlOp)
       .value("BAD_UTF8", StatusCode::kRegexpBadUTF8)
       .value("BAD_NAMED_CAPTURE", StatusCode::kRegexpBadNamedCapture);
+  PyStatusCode.attr("__str__") =
+      py::cpp_function(&Status::CodeText, py::is_method(PyStatusCode));
 
   py::class_<Expression>(m, EXPRESSION_NAME)
       .def(py::init([](const std::string& pattern) {
