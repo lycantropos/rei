@@ -1,8 +1,9 @@
+from enum import Enum, EnumMeta
 from functools import partial
 from typing import (Callable,
                     Iterable,
                     Tuple,
-                    TypeVar)
+                    Type, TypeVar)
 
 _T1 = TypeVar('_T1')
 _T2 = TypeVar('_T2')
