@@ -16,12 +16,14 @@ namespace py = pybind11;
 #define EXPRESSION_NAME "Expression"
 #define PARSE_FLAG_NAME "ParseFlag"
 #define RUNE_NAME "Rune"
+#define STATUS_CODE_NAME "StatusCode"
 #ifndef VERSION_INFO
 #define VERSION_INFO "dev"
 #endif
 
 using Expression = re2::RE2;
 using ParseFlag = re2::Regexp::ParseFlags;
+
 class Rune {
  public:
   Rune(const py::bytes& components) {
@@ -58,6 +60,8 @@ class Rune {
  private:
   re2::Rune _raw;
 };
+
+using StatusCode = re2::RegexpStatusCode;
 
 template <class Object>
 std::string repr(const Object& object) {
@@ -127,6 +131,24 @@ PYBIND11_MODULE(MODULE_NAME, m) {
       .def("__repr__", repr<Rune>)
       .def("__str__", &Rune::operator py::str)
       .def_property_readonly("components", &Rune::components);
+
+  py::enum_<StatusCode>(m, STATUS_CODE_NAME)
+      .value("SUCCESS", StatusCode::kRegexpSuccess)
+      .value("INTERNAL_ERROR", StatusCode::kRegexpInternalError)
+      .value("BAD_ESCAPE", StatusCode::kRegexpBadEscape)
+      .value("BAD_CHAR_CLASS", StatusCode::kRegexpBadCharClass)
+      .value("BAD_CHAR_RANGE", StatusCode::kRegexpBadCharRange)
+      .value("MISSING_BRACKET", StatusCode::kRegexpMissingBracket)
+      .value("MISSING_PAREN", StatusCode::kRegexpMissingParen)
+      .value("UNEXPECTED_PAREN", StatusCode::kRegexpUnexpectedParen)
+      .value("TRAILING_BACKSLASH", StatusCode::kRegexpTrailingBackslash)
+      .value("REPEAT_ARGUMENT", StatusCode::kRegexpRepeatArgument)
+      .value("REPEAT_SIZE", StatusCode::kRegexpRepeatSize)
+      .value("REPEAT_OP", StatusCode::kRegexpRepeatOp)
+      .value("BAD_PERL_OP", StatusCode::kRegexpBadPerlOp)
+      .value("BAD_UTF8", StatusCode::kRegexpBadUTF8)
+      .value("BAD_NAMED_CAPTURE", StatusCode::kRegexpBadNamedCapture)
+      .export_values();
 
   py::class_<Expression>(m, EXPRESSION_NAME)
       .def(py::init([](const std::string& pattern) {
