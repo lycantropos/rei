@@ -2,7 +2,7 @@ import enum
 
 
 class Operation(enum.IntEnum):
-    NO_MATCH = enum.auto()
+    NO_MATCH = 1
     EMPTY_MATCH = enum.auto()
     LITERAL = enum.auto()
     LITERAL_STRING = enum.auto()
