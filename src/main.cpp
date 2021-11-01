@@ -14,6 +14,7 @@ namespace py = pybind11;
 #define C_STR_HELPER(a) #a
 #define C_STR(a) C_STR_HELPER(a)
 #define EXPRESSION_NAME "Expression"
+#define OPERATION_NAME "Operation"
 #define PARSE_FLAG_NAME "ParseFlag"
 #define RUNE_NAME "Rune"
 #define STATUS_CODE_NAME "StatusCode"
@@ -22,6 +23,7 @@ namespace py = pybind11;
 #endif
 
 using Expression = re2::RE2;
+using Operation = re2::RegexpOp;
 using ParseFlag = re2::Regexp::ParseFlags;
 
 class Rune {
@@ -99,6 +101,31 @@ static std::ostream& operator<<(std::ostream& stream, const Rune& rune) {
 PYBIND11_MODULE(MODULE_NAME, m) {
   m.doc() = R"pbdoc(Python binding of `re2` C++ library.)pbdoc";
   m.attr("__version__") = C_STR(VERSION_INFO);
+
+  py::enum_<Operation>(m, OPERATION_NAME)
+      .value("NO_MATCH", Operation::kRegexpNoMatch)
+      .value("EMPTY_MATCH", Operation::kRegexpEmptyMatch)
+      .value("LITERAL", Operation::kRegexpLiteral)
+      .value("LITERAL_STRING", Operation::kRegexpLiteralString)
+      .value("CONCAT", Operation::kRegexpConcat)
+      .value("ALTERNATE", Operation::kRegexpAlternate)
+      .value("STAR", Operation::kRegexpStar)
+      .value("PLUS", Operation::kRegexpPlus)
+      .value("QUEST", Operation::kRegexpQuest)
+      .value("REPEAT", Operation::kRegexpRepeat)
+      .value("CAPTURE", Operation::kRegexpCapture)
+      .value("ANY_CHAR", Operation::kRegexpAnyChar)
+      .value("ANY_BYTE", Operation::kRegexpAnyByte)
+      .value("BEGIN_LINE", Operation::kRegexpBeginLine)
+      .value("END_LINE", Operation::kRegexpEndLine)
+      .value("WORD_BOUNDARY", Operation::kRegexpWordBoundary)
+      .value("NO_WORD_BOUNDARY", Operation::kRegexpNoWordBoundary)
+      .value("BEGIN_TEXT", Operation::kRegexpBeginText)
+      .value("END_TEXT", Operation::kRegexpEndText)
+      .value("CHAR_CLASS", Operation::kRegexpCharClass)
+      .value("HAVE_MATCH", Operation::kRegexpHaveMatch)
+      .value("MAX_OPERATION", Operation::kMaxRegexpOp)
+      .export_values();
 
   py::enum_<ParseFlag>(m, PARSE_FLAG_NAME)
       .value("NO_PARSE_FLAGS", ParseFlag::NoParseFlags)
