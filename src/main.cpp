@@ -177,8 +177,6 @@ PYBIND11_MODULE(MODULE_NAME, m) {
       py::cpp_function(&Status::CodeText, py::is_method(PyStatusCode));
 
   py::class_<Expression>(m, EXPRESSION_NAME)
-      .def(py::init([](const std::string& pattern) {
-        return std::make_unique<Expression>(re2::StringPiece{pattern});
-      }))
+      .def(py::init<const std::string&>())
       .def_property_readonly("pattern", &Expression::pattern);
 }
