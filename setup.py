@@ -100,7 +100,7 @@ if platform.python_implementation() == 'CPython':
             link_args = self.link_args[compiler_type]
             cpp_standards = [
                 year_to_standard(year)
-                for year in reversed(range(2011, date.today().year + 1, 3))]
+                for year in reversed(range(2017, date.today().year + 1, 3))]
             if compiler_type == 'unix':
                 compile_args.append(
                         to_first_supported_flag(['-std={}'.format(standard)
