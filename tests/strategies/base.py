@@ -1,11 +1,13 @@
+import string
+
 from hypothesis import strategies
 
 from tests.hints import Strategy
 from tests.utils import (pack,
                          sort_pair)
 
-patterns_special_characters = ['+', '-', '*', '?', '^', '(', ')', '[', ']',
-                               '{', '}', '|', '\\']
+patterns_special_characters = ['$', '(', ')', '*', '+', '-', '?', '[', '\\',
+                               ']', '^', '{', '|', '}']
 escape_special_character = '\\{}'.format
 exact_patterns = strategies.text(
         strategies.characters(blacklist_characters=patterns_special_characters,
@@ -43,5 +45,9 @@ def to_repeated_patterns(strategy: Strategy[str]) -> Strategy[str]:
 patterns = (unrepeated_patterns
             | to_repeated_patterns(unrepeated_patterns.filter(bool)))
 patterns |= strategies.tuples(patterns, patterns).map(pack('{}|{}'.format))
+captures_names = strategies.text(strategies.sampled_from(string.ascii_letters),
+                                 min_size=1)
+patterns |= (strategies.tuples(captures_names, patterns)
+             .map(pack('(?P<{}>{})'.format)))
 patterns |= patterns.map('^{}'.format)
 patterns |= patterns.map('{}$'.format)
