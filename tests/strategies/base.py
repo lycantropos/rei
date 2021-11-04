@@ -4,8 +4,8 @@ from tests.hints import Strategy
 from tests.utils import (pack,
                          sort_pair)
 
-patterns_special_characters = ['+', '*', '?', '^', '(', ')', '[', ']', '{',
-                               '}', '|', '\\']
+patterns_special_characters = ['+', '-', '*', '?', '^', '(', ')', '[', ']',
+                               '{', '}', '|', '\\']
 escape_special_character = '\\{}'.format
 exact_patterns = strategies.text(
         strategies.characters(blacklist_characters=patterns_special_characters,
