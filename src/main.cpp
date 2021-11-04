@@ -13,6 +13,7 @@ namespace py = pybind11;
 #define MODULE_NAME _rei
 #define C_STR_HELPER(a) #a
 #define C_STR(a) C_STR_HELPER(a)
+#define ANCHOR_NAME "Anchor"
 #define EXPRESSION_NAME "Expression"
 #define OPERATION_NAME "Operation"
 #define PARSE_FLAG_NAME "ParseFlag"
@@ -23,6 +24,7 @@ namespace py = pybind11;
 #endif
 
 using Expression = re2::RE2;
+using Anchor = Expression::Anchor;
 using Operation = re2::RegexpOp;
 using ParseFlag = re2::Regexp::ParseFlags;
 
@@ -101,6 +103,11 @@ static std::ostream& operator<<(std::ostream& stream, const Rune& rune) {
 PYBIND11_MODULE(MODULE_NAME, m) {
   m.doc() = R"pbdoc(Python binding of `re2` C++ library.)pbdoc";
   m.attr("__version__") = C_STR(VERSION_INFO);
+
+  py::enum_<Anchor>(m, ANCHOR_NAME)
+      .value("NONE", Anchor::UNANCHORED)
+      .value("START", Anchor::ANCHOR_START)
+      .value("BOTH", Anchor::ANCHOR_BOTH);
 
   py::enum_<Operation>(m, OPERATION_NAME)
       .value("NO_MATCH", Operation::kRegexpNoMatch)
