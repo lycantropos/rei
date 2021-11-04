@@ -87,16 +87,6 @@ class StringPiece {
 
   void remove_suffix(size_type n) { size_ -= n; }
 
-  void set(const char* str) {
-    data_ = str;
-    size_ = str == NULL ? 0 : strlen(str);
-  }
-
-  void set(const char* str, size_type len) {
-    data_ = str;
-    size_ = len;
-  }
-
   // Converts to `std::basic_string`.
   template <typename A>
   explicit operator std::basic_string<char, traits_type, A>() const {
