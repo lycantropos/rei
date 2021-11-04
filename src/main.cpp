@@ -18,6 +18,7 @@ namespace py = pybind11;
 #define OPERATION_NAME "Operation"
 #define PARSE_FLAG_NAME "ParseFlag"
 #define RUNE_NAME "Rune"
+#define STATUS_NAME "Status"
 #define STATUS_CODE_NAME "StatusCode"
 #ifndef VERSION_INFO
 #define VERSION_INFO "dev"
@@ -65,7 +66,9 @@ class Rune {
   re2::Rune _raw;
 };
 
+using Status = re2::RegexpStatus;
 using StatusCode = re2::RegexpStatusCode;
+using StringPiece = re2::StringPiece;
 
 template <class Object>
 std::string repr(const Object& object) {
@@ -182,6 +185,13 @@ PYBIND11_MODULE(MODULE_NAME, m) {
       .value("BAD_NAMED_CAPTURE", StatusCode::kRegexpBadNamedCapture);
   PyStatusCode.attr("__str__") =
       py::cpp_function(&Status::CodeText, py::is_method(PyStatusCode));
+
+  py::class_<Status>(m, STATUS_NAME)
+      .def(py::init())
+      .def_property_readonly("code", &Status::code)
+      .def_property_readonly("error_arg", [](const Status& self) {
+        return self.error_arg().as_string();
+      });
 
   py::class_<Expression>(m, EXPRESSION_NAME)
       .def(py::init<const std::string&>())
