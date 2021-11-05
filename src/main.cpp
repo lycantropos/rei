@@ -187,7 +187,14 @@ PYBIND11_MODULE(MODULE_NAME, m) {
       py::cpp_function(&Status::CodeText, py::is_method(PyStatusCode));
 
   py::class_<Status>(m, STATUS_NAME)
-      .def(py::init())
+      .def(py::init([](StatusCode code, const std::string& error_arg) {
+             auto result = std::make_unique<Status>();
+             result->set_code(code);
+             result->set_error_arg(StringPiece::make_shared(error_arg));
+             return result;
+           }),
+           py::arg("code") = StatusCode::kRegexpSuccess,
+           py::arg("error_arg") = std::string())
       .def("__str__", &Status::Text)
       .def_property("code", &Status::code, &Status::set_code)
       .def_property(
