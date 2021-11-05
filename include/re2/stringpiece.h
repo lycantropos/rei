@@ -30,6 +30,7 @@
 #include <algorithm>
 #include <iosfwd>
 #include <iterator>
+#include <memory>
 #include <string>
 #if __has_include(<string_view>) && __cplusplus >= 201703L
 #include <string_view>
@@ -65,6 +66,13 @@ class StringPiece {
   StringPiece(const char* str)
       : data_(str), size_(str == NULL ? 0 : strlen(str)) {}
   StringPiece(const char* str, size_type len) : data_(str), size_(len) {}
+
+  template <class... Args>
+  static StringPiece make_shared(Args... args) {
+    StringPiece result{args...};
+    return StringPiece(
+        std::make_shared<std::string>(result.data_, result.size_));
+  }
 
   const_iterator begin() const { return data_; }
   const_iterator end() const { return data_ + size_; }
@@ -145,8 +153,12 @@ class StringPiece {
   size_type rfind(char c, size_type pos = npos) const;
 
  private:
+  StringPiece(std::shared_ptr<std::string> value)
+      : data_(value->data()), size_(value->size()), value_(value) {}
+
   const_pointer data_;
   size_type size_;
+  std::shared_ptr<std::string> value_ = nullptr;
 };
 
 inline bool operator==(const StringPiece& x, const StringPiece& y) {
