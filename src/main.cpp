@@ -188,10 +188,14 @@ PYBIND11_MODULE(MODULE_NAME, m) {
 
   py::class_<Status>(m, STATUS_NAME)
       .def(py::init())
-      .def_property_readonly("code", &Status::code)
-      .def_property_readonly("error_arg", [](const Status& self) {
-        return self.error_arg().as_string();
-      });
+      .def("__str__", &Status::Text)
+      .def_property("code", &Status::code, &Status::set_code)
+      .def_property(
+          "error_arg",
+          [](const Status& self) { return self.error_arg().as_string(); },
+          [](Status& self, const std::string value) {
+            self.set_error_arg(StringPiece::make_shared(value));
+          });
 
   py::class_<Expression>(m, EXPRESSION_NAME)
       .def(py::init<const std::string&>())
