@@ -1,5 +1,7 @@
 #include <pybind11/operators.h>
 #include <pybind11/pybind11.h>
+
+#define private public
 #include <re2/re2.h>
 #include <re2/regexp.h>
 #include <util/utf.h>
@@ -17,6 +19,7 @@ namespace py = pybind11;
 #define EXPRESSION_NAME "Expression"
 #define OPERATION_NAME "Operation"
 #define PARSE_FLAG_NAME "ParseFlag"
+#define PARSE_STATE_NAME "ParseState"
 #define RUNE_NAME "Rune"
 #define STATUS_NAME "Status"
 #define STATUS_CODE_NAME "StatusCode"
@@ -28,6 +31,7 @@ using Expression = re2::RE2;
 using Anchor = Expression::Anchor;
 using Operation = re2::RegexpOp;
 using ParseFlag = re2::Regexp::ParseFlags;
+using ParseState = re2::Regexp::ParseState;
 
 class Rune {
  public:
@@ -88,6 +92,75 @@ static std::ostream& operator<<(std::ostream& stream, const py::bytes& bytes) {
   std::vector<py::str> components;
   for (auto byte : py::iter(bytes)) components.push_back(py::str(byte));
   return stream << "bytes([" << join(components, ", ") << "])";
+}
+
+static std::ostream& operator<<(std::ostream& stream, const ParseFlag& value) {
+  stream << C_STR(MODULE_NAME) "." STATUS_CODE_NAME ".";
+  switch (value) {
+    case ParseFlag::NoParseFlags:
+      stream << "NO_PARSE_FLAGS";
+      break;
+    case ParseFlag::FoldCase:
+      stream << "FOLD_CASE";
+      break;
+    case ParseFlag::Literal:
+      stream << "LITERAL";
+      break;
+    case ParseFlag::ClassNL:
+      stream << "CLASS_NL";
+      break;
+    case ParseFlag::DotNL:
+      stream << "DOT_NL";
+      break;
+    case ParseFlag::MatchNL:
+      stream << "MATCH_NL";
+      break;
+    case ParseFlag::OneLine:
+      stream << "ONE_LINE";
+      break;
+    case ParseFlag::Latin1:
+      stream << "LATIN1";
+      break;
+    case ParseFlag::NonGreedy:
+      stream << "NON_GREEDY";
+      break;
+    case ParseFlag::PerlClasses:
+      stream << "PERL_CLASSES";
+      break;
+    case ParseFlag::PerlB:
+      stream << "PERL_B";
+      break;
+    case ParseFlag::PerlX:
+      stream << "PERL_X";
+      break;
+    case ParseFlag::UnicodeGroups:
+      stream << "UNICODE_GROUPS";
+      break;
+    case ParseFlag::NeverNL:
+      stream << "NEVER_NL";
+      break;
+    case ParseFlag::NeverCapture:
+      stream << "NEVER_CAPTURE";
+      break;
+    case ParseFlag::LikePerl:
+      stream << "LIKE_PERL";
+      break;
+    case ParseFlag::WasDollar:
+      stream << "WAS_DOLLAR";
+      break;
+    case ParseFlag::AllParseFlags:
+      stream << "ALL_PARSE_FLAGS";
+      break;
+    default:
+      stream << "???";
+      break;
+  }
+  return stream;
+}
+
+static std::ostream& operator<<(std::ostream& stream, const ParseState& state) {
+  return stream << C_STR(MODULE_NAME) "." STATUS_NAME "(" << state.flags()
+                << ", '" << state.whole_regexp_ << "')";
 }
 
 static std::ostream& operator<<(std::ostream& stream, const Rune& rune) {
@@ -236,6 +309,21 @@ PYBIND11_MODULE(MODULE_NAME, m) {
       .value("LIKE_PERL", ParseFlag::LikePerl)
       .value("WAS_DOLLAR", ParseFlag::WasDollar)
       .value("ALL_PARSE_FLAGS", ParseFlag::AllParseFlags);
+
+  struct ParseStateDeleter {
+    void operator()(ParseState* self) const noexcept { delete self->status_; }
+  };
+
+  py::class_<ParseState, std::unique_ptr<ParseState, ParseStateDeleter>>(
+      m, PARSE_STATE_NAME)
+      .def(py::init<>([](ParseFlag flag, const StringPiece& pattern) {
+        return std::unique_ptr<ParseState, ParseStateDeleter>(
+            new ParseState(flag, pattern, new Status()));
+      }))
+      .def("__repr__", repr<ParseState>)
+      .def_property_readonly("flag", &ParseState::flags)
+      .def_readonly("pattern", &ParseState::whole_regexp_)
+      .def_readonly("status", &ParseState::status_);
 
   py::class_<Rune>(m, RUNE_NAME)
       .def(py::init<const py::bytes&>(), py::arg("components"))
