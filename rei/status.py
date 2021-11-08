@@ -1,3 +1,5 @@
+from reprit.base import generate_repr
+
 from .status_code import StatusCode
 
 
@@ -7,6 +9,8 @@ class Status:
     def __init__(self, code: StatusCode, error_arg: str = '') -> None:
         self.code = code
         self.error_arg = error_arg
+
+    __repr__ = generate_repr(__init__)
 
     def __str__(self) -> str:
         return f'{self.code}: {self.error_arg}'
