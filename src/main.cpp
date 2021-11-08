@@ -218,12 +218,7 @@ PYBIND11_MODULE(MODULE_NAME, m) {
            py::arg("error_arg") = std::string())
       .def("__str__", &Status::Text)
       .def_property("code", &Status::code, &Status::set_code)
-      .def_property(
-          "error_arg",
-          [](const Status& self) { return self.error_arg().as_string(); },
-          [](Status& self, const std::string value) {
-            self.set_error_arg(StringPiece::make_shared(value));
-          });
+      .def_property("error_arg", &Status::error_arg, &Status::set_error_arg);
 
   py::class_<Expression>(m, EXPRESSION_NAME)
       .def(py::init<const std::string&>())
