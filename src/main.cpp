@@ -103,6 +103,27 @@ static std::ostream& operator<<(std::ostream& stream, const Rune& rune) {
                 << ")";
 }
 
+namespace pybind11 {
+namespace detail {
+template <>
+struct type_caster<StringPiece> {
+  PYBIND11_TYPE_CASTER(StringPiece, _("StringPiece"));
+
+  bool load(handle src, bool) {
+    PyObject* source = src.ptr();
+    if (PyUnicode_Check(source) < 1) return false;
+    value = StringPiece::make_shared(PyUnicode_AsUTF8(source));
+    return !!(value.data());
+  }
+
+  static handle cast(StringPiece src, return_value_policy /* policy */,
+                     handle /* parent */) {
+    return PyUnicode_FromStringAndSize(src.data(), src.size());
+  }
+};
+}  // namespace detail
+}  // namespace pybind11
+
 PYBIND11_MODULE(MODULE_NAME, m) {
   m.doc() = R"pbdoc(Python binding of `re2` C++ library.)pbdoc";
   m.attr("__version__") = C_STR(VERSION_INFO);
