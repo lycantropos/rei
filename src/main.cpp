@@ -158,7 +158,7 @@ static std::ostream& operator<<(std::ostream& stream, const ParseFlag& value) {
 
 static std::ostream& operator<<(std::ostream& stream, const ParseState& state) {
   return stream << C_STR(MODULE_NAME) "." STATUS_NAME "(" << state.flags()
-                << ", '" << state.whole_regexp_ << "')";
+                << ", '" << state.whole_regexp() << "')";
 }
 
 static std::ostream& operator<<(std::ostream& stream, const Rune& rune) {
@@ -313,7 +313,7 @@ PYBIND11_MODULE(MODULE_NAME, m) {
       .value("ALL_PARSE_FLAGS", ParseFlag::AllParseFlags);
 
   struct ParseStateDeleter {
-    void operator()(ParseState* self) const noexcept { delete self->status_; }
+    void operator()(ParseState* self) const noexcept { delete self->status(); }
   };
 
   py::class_<ParseState, std::unique_ptr<ParseState, ParseStateDeleter>>(
@@ -324,8 +324,8 @@ PYBIND11_MODULE(MODULE_NAME, m) {
       }))
       .def("__repr__", repr<ParseState>)
       .def_property_readonly("flag", &ParseState::flags)
-      .def_readonly("pattern", &ParseState::whole_regexp_)
-      .def_readonly("status", &ParseState::status_);
+      .def_property_readonly("pattern", &ParseState::whole_regexp)
+      .def_property_readonly("status", &ParseState::status);
 
   py::class_<Rune>(m, RUNE_NAME)
       .def(py::init<const py::bytes&>(), py::arg("components"))
