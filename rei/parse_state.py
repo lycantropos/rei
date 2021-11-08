@@ -7,7 +7,7 @@ from .status import Status
 class ParseState:
     __slots__ = '_flag', '_pattern', '_status'
 
-    def __init__(self, flag: ParseFlag, pattern: str) -> None:
+    def __init__(self, pattern: str, flag: ParseFlag) -> None:
         self._flag = flag
         self._pattern = pattern
         self._status = Status()
