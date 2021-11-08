@@ -18,6 +18,7 @@ namespace py = pybind11;
 #define OPERATION_NAME "Operation"
 #define PARSE_FLAG_NAME "ParseFlag"
 #define PARSE_STATE_NAME "ParseState"
+#define REGEXP_NAME "Regexp"
 #define RUNE_NAME "Rune"
 #define STATUS_NAME "Status"
 #define STATUS_CODE_NAME "StatusCode"
@@ -30,6 +31,7 @@ using Anchor = Expression::Anchor;
 using Operation = re2::RegexpOp;
 using ParseFlag = re2::Regexp::ParseFlags;
 using ParseState = re2::Regexp::ParseState;
+using Regexp = re2::Regexp;
 
 class Rune {
  public:
@@ -326,6 +328,19 @@ PYBIND11_MODULE(MODULE_NAME, m) {
       .def_property_readonly("flag", &ParseState::flags)
       .def_property_readonly("pattern", &ParseState::whole_regexp)
       .def_property_readonly("status", &ParseState::status);
+
+  struct RegexpDeleter {
+    void operator()(Regexp* self) const noexcept { self->Decref(); }
+  };
+
+  py::class_<Regexp, std::unique_ptr<Regexp, RegexpDeleter>>(m, REGEXP_NAME)
+      .def(py::init([](const StringPiece& pattern, ParseFlag flag) {
+        Status* status = new Status();
+        Regexp* result = Regexp::Parse(pattern, flag, status);
+        delete status;
+        return std::unique_ptr<Regexp, RegexpDeleter>(result);
+      }))
+      .def("__str__", &Regexp::ToString);
 
   py::class_<Rune>(m, RUNE_NAME)
       .def(py::init<const py::bytes&>(), py::arg("components"))
