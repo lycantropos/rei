@@ -345,6 +345,11 @@ class Regexp {
     ~ParseState();
 
     ParseFlags flags() const { return flags_; }
+
+    const StringPiece& whole_regexp() const { return whole_regexp_; }
+
+    const RegexpStatus* status() const { return status_; }
+
     int rune_max() { return rune_max_; }
 
     // Parse methods.  All public methods return a bool saying
