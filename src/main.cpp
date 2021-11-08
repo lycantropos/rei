@@ -335,11 +335,17 @@ PYBIND11_MODULE(MODULE_NAME, m) {
 
   py::class_<Regexp, std::unique_ptr<Regexp, RegexpDeleter>>(m, REGEXP_NAME)
       .def(py::init([](const StringPiece& pattern, ParseFlag flag) {
-        Status* status = new Status();
-        Regexp* result = Regexp::Parse(pattern, flag, status);
-        delete status;
-        return std::unique_ptr<Regexp, RegexpDeleter>(result);
-      }))
+             Status* status = new Status();
+             Regexp* result = Regexp::Parse(pattern, flag, status);
+             if (status->code() != StatusCode::kRegexpSuccess) {
+               std::invalid_argument error(status->Text());
+               delete status;
+               throw error;
+             }
+             delete status;
+             return std::unique_ptr<Regexp, RegexpDeleter>(result);
+           }),
+           py::arg("pattern"), py::arg("flag") = ParseFlag::NoParseFlags)
       .def("__str__", &Regexp::ToString);
 
   py::class_<Rune>(m, RUNE_NAME)
