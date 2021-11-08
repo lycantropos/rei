@@ -245,8 +245,12 @@ struct type_caster<StringPiece> {
   bool load(handle src, bool) {
     PyObject* source = src.ptr();
     if (PyUnicode_Check(source) < 1) return false;
-    value = StringPiece::make_shared(PyUnicode_AsUTF8(source));
-    return !!(value.data());
+    Py_ssize_t size;
+    const char* data = PyUnicode_AsUTF8AndSize(source, &size);
+    if (data == nullptr) return false;
+    value = StringPiece::make_shared(data,
+                                     static_cast<StringPiece::size_type>(size));
+    return true;
   }
 
   static handle cast(StringPiece src, return_value_policy /* policy */,
