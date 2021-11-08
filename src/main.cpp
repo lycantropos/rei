@@ -318,7 +318,7 @@ PYBIND11_MODULE(MODULE_NAME, m) {
 
   py::class_<ParseState, std::unique_ptr<ParseState, ParseStateDeleter>>(
       m, PARSE_STATE_NAME)
-      .def(py::init<>([](ParseFlag flag, const StringPiece& pattern) {
+      .def(py::init<>([](const StringPiece& pattern, ParseFlag flag) {
         return std::unique_ptr<ParseState, ParseStateDeleter>(
             new ParseState(flag, pattern, new Status()));
       }))
