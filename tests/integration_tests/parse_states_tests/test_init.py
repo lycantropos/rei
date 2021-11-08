@@ -13,7 +13,7 @@ def test_basic(parse_flags_pair: BoundPortedParseFlagsPair,
                pattern: str) -> None:
     bound_status_code, ported_status_code = parse_flags_pair
 
-    bound, ported = (BoundParseState(bound_status_code, pattern),
-                     PortedParseState(ported_status_code, pattern))
+    bound, ported = (BoundParseState(pattern, bound_status_code),
+                     PortedParseState(pattern, ported_status_code))
 
     assert are_bound_ported_parse_states_equivalent(bound, ported)
