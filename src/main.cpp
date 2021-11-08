@@ -1,14 +1,12 @@
 #include <pybind11/operators.h>
 #include <pybind11/pybind11.h>
+#include <re2/re2.h>
+#include <re2/regexp.h>
+#include <util/utf.h>
 
 #include <numeric>
 #include <sstream>
 #include <string>
-
-#define private public
-#include <re2/re2.h>
-#include <re2/regexp.h>
-#include <util/utf.h>
 
 namespace py = pybind11;
 
