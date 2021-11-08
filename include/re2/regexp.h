@@ -511,7 +511,7 @@ class Regexp {
                RegexpStatus* status);
     ~ParseState();
 
-    ParseFlags flags() { return flags_; }
+    ParseFlags flags() const { return flags_; }
     int rune_max() { return rune_max_; }
 
     // Parse methods.  All public methods return a bool saying
