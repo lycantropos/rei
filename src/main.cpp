@@ -70,14 +70,6 @@ using Status = re2::RegexpStatus;
 using StatusCode = re2::RegexpStatusCode;
 using StringPiece = re2::StringPiece;
 
-template <class Object>
-std::string repr(const Object& object) {
-  std::ostringstream stream;
-  stream.precision(std::numeric_limits<double>::digits10 + 2);
-  stream << object;
-  return stream.str();
-}
-
 template <class Iterable>
 static std::string join(const Iterable& elements,
                         const std::string& separator) {
@@ -101,6 +93,74 @@ static std::ostream& operator<<(std::ostream& stream, const py::bytes& bytes) {
 static std::ostream& operator<<(std::ostream& stream, const Rune& rune) {
   return stream << C_STR(MODULE_NAME) "." RUNE_NAME "(" << rune.components()
                 << ")";
+}
+
+static std::ostream& operator<<(std::ostream& stream, const StatusCode& value) {
+  stream << C_STR(MODULE_NAME) "." STATUS_CODE_NAME ".";
+  switch (value) {
+    case StatusCode::kRegexpSuccess:
+      stream << "SUCCESS";
+      break;
+    case StatusCode::kRegexpInternalError:
+      stream << "INTERNAL_ERROR";
+      break;
+    case StatusCode::kRegexpBadEscape:
+      stream << "BAD_ESCAPE";
+      break;
+    case StatusCode::kRegexpBadCharClass:
+      stream << "BAD_CHAR_CLASS";
+      break;
+    case StatusCode::kRegexpBadCharRange:
+      stream << "BAD_CHAR_RANGE";
+      break;
+    case StatusCode::kRegexpMissingBracket:
+      stream << "MISSING_BRACKET";
+      break;
+    case StatusCode::kRegexpMissingParen:
+      stream << "MISSING_PAREN";
+      break;
+    case StatusCode::kRegexpUnexpectedParen:
+      stream << "UNEXPECTED_PAREN";
+      break;
+    case StatusCode::kRegexpTrailingBackslash:
+      stream << "TRAILING_BACKSLASH";
+      break;
+    case StatusCode::kRegexpRepeatArgument:
+      stream << "REPEAT_ARGUMENT";
+      break;
+    case StatusCode::kRegexpRepeatSize:
+      stream << "REPEAT_SIZE";
+      break;
+    case StatusCode::kRegexpRepeatOp:
+      stream << "REPEAT_OP";
+      break;
+    case StatusCode::kRegexpBadPerlOp:
+      stream << "BAD_PERL_OP";
+      break;
+    case StatusCode::kRegexpBadUTF8:
+      stream << "BAD_UTF8";
+      break;
+    case StatusCode::kRegexpBadNamedCapture:
+      stream << "BAD_NAMED_CAPTURE";
+      break;
+    default:
+      stream << "???";
+      break;
+  }
+  return stream;
+}
+
+static std::ostream& operator<<(std::ostream& stream, const Status& status) {
+  return stream << C_STR(MODULE_NAME) "." STATUS_NAME "(" << status.code()
+                << ", '" << status.error_arg() << "')";
+}
+
+template <class Object>
+std::string repr(const Object& object) {
+  std::ostringstream stream;
+  stream.precision(std::numeric_limits<double>::digits10 + 2);
+  stream << object;
+  return stream.str();
 }
 
 namespace pybind11 {
@@ -216,6 +276,7 @@ PYBIND11_MODULE(MODULE_NAME, m) {
            }),
            py::arg("code") = StatusCode::kRegexpSuccess,
            py::arg("error_arg") = std::string())
+      .def("__repr__", repr<Status>)
       .def("__str__", &Status::Text)
       .def_property("code", &Status::code, &Status::set_code)
       .def_property("error_arg", &Status::error_arg, &Status::set_error_arg);
