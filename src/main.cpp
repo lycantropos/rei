@@ -360,10 +360,10 @@ PYBIND11_MODULE(MODULE_NAME, m) {
       py::cpp_function(&Status::CodeText, py::is_method(PyStatusCode));
 
   py::class_<Status>(m, STATUS_NAME)
-      .def(py::init([](StatusCode code, const std::string& error_arg) {
+      .def(py::init([](StatusCode code, const StringPiece& error_arg) {
              auto result = std::make_unique<Status>();
              result->set_code(code);
-             result->set_error_arg(StringPiece::make_shared(error_arg));
+             result->set_error_arg(error_arg);
              return result;
            }),
            py::arg("code") = StatusCode::kRegexpSuccess,
