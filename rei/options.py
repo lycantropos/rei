@@ -3,19 +3,19 @@ from .encoding import Encoding
 
 class Options:
     def __init__(self,
-                 encoding: Encoding,
-                 posix_syntax: bool,
-                 longest_match: bool,
-                 log_errors: bool,
-                 max_memory: int,
-                 literal: bool,
-                 never_nl: bool,
-                 dot_nl: bool,
-                 never_capture: bool,
-                 case_sensitive: bool,
-                 perl_classes: bool,
-                 word_boundary: bool,
-                 one_line: bool) -> None:
+                 encoding: Encoding = Encoding.UTF_8,
+                 posix_syntax: bool = False,
+                 longest_match: bool = False,
+                 log_errors: bool = True,
+                 max_memory: int = 8 << 20,
+                 literal: bool = False,
+                 never_nl: bool = False,
+                 dot_nl: bool = False,
+                 never_capture: bool = False,
+                 case_sensitive: bool = True,
+                 perl_classes: bool = False,
+                 word_boundary: bool = False,
+                 one_line: bool = False) -> None:
         self.encoding = encoding
         self.posix_syntax = posix_syntax
         self.longest_match = longest_match
