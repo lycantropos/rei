@@ -1,13 +1,18 @@
 from enum import Enum
 from typing import Type
 
-from tests.binding_tests.hints import (BoundParseFlag, BoundParseState,
+from tests.binding_tests.hints import (BoundEncoding,
+                                       BoundParseFlag,
+                                       BoundParseState,
                                        BoundRune,
                                        BoundStatus,
                                        BoundStatusCode)
-from tests.integration_tests.hints import BoundPortedParseFlagsPair, \
-    BoundPortedStatusCodesPair
-from tests.port_tests.hints import (PortedParseFlag, PortedParseState,
+from tests.integration_tests.hints import (BoundPortedEncodingsPair,
+                                           BoundPortedParseFlagsPair,
+                                           BoundPortedStatusCodesPair)
+from tests.port_tests.hints import (PortedEncoding,
+                                    PortedParseFlag,
+                                    PortedParseState,
                                     PortedRune,
                                     PortedStatus,
                                     PortedStatusCode)
@@ -39,11 +44,16 @@ def are_enumerations_equivalent(left: Type[Enum], right: Type[Enum]) -> bool:
                     for name, left_value in left_members.items()))
 
 
-def to_bound_with_ported_status_codes_pairs(value: int
-                                            ) -> BoundPortedStatusCodesPair:
+def to_bound_with_ported_encodings_pair(value: int
+                                        ) -> BoundPortedEncodingsPair:
+    return BoundEncoding(value), PortedEncoding(value)
+
+
+def to_bound_with_ported_status_codes_pair(value: int
+                                           ) -> BoundPortedStatusCodesPair:
     return BoundStatusCode(value), PortedStatusCode(value)
 
 
-def to_bound_with_ported_parse_flags_pairs(value: int
-                                           ) -> BoundPortedParseFlagsPair:
+def to_bound_with_ported_parse_flags_pair(value: int
+                                          ) -> BoundPortedParseFlagsPair:
     return BoundParseFlag(value), PortedParseFlag(value)

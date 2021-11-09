@@ -1,4 +1,5 @@
 from _rei import (Anchor as BoundAnchor,
+                  Encoding as BoundEncoding,
                   Expression as BoundExpression,
                   Operation as BoundOperation,
                   ParseFlag as BoundParseFlag,
@@ -8,6 +9,7 @@ from _rei import (Anchor as BoundAnchor,
                   StatusCode as BoundStatusCode)
 
 BoundAnchor = BoundAnchor
+BoundEncoding = BoundEncoding
 BoundExpression = BoundExpression
 BoundOperation = BoundOperation
 BoundParseFlag = BoundParseFlag
