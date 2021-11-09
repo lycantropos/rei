@@ -1,17 +1,20 @@
 from enum import Enum
 from typing import Type
 
-from tests.binding_tests.hints import (BoundEncoding,
+from tests.binding_tests.hints import (BoundCannedOption,
+                                       BoundEncoding,
                                        BoundOptions,
                                        BoundParseFlag,
                                        BoundParseState,
                                        BoundRune,
                                        BoundStatus,
                                        BoundStatusCode)
-from tests.integration_tests.hints import (BoundPortedEncodingsPair,
+from tests.integration_tests.hints import (BoundPortedCannedOptionsPair,
+                                           BoundPortedEncodingsPair,
                                            BoundPortedParseFlagsPair,
                                            BoundPortedStatusCodesPair)
-from tests.port_tests.hints import (PortedEncoding,
+from tests.port_tests.hints import (PortedCannedOption,
+                                    PortedEncoding,
                                     PortedOptions,
                                     PortedParseFlag,
                                     PortedParseState,
@@ -61,6 +64,11 @@ def are_enumerations_equivalent(left: Type[Enum], right: Type[Enum]) -> bool:
             and left_members.keys() == right_members.keys()
             and all(left_value == right_members[name]
                     for name, left_value in left_members.items()))
+
+
+def to_bound_with_ported_canned_options_pair(value: int
+                                             ) -> BoundPortedCannedOptionsPair:
+    return BoundCannedOption(value), PortedCannedOption(value)
 
 
 def to_bound_with_ported_encodings_pair(value: int
