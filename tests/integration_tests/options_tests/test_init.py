@@ -7,6 +7,12 @@ from tests.port_tests.hints import PortedOptions
 from . import strategies
 
 
+def test_no_arguments() -> None:
+    bound, ported = BoundOptions(), PortedOptions()
+
+    assert are_bound_ported_options_equivalent(bound, ported)
+
+
 @given(strategies.encodings_pairs, strategies.booleans, strategies.booleans,
        strategies.booleans, strategies.integers_64, strategies.booleans,
        strategies.booleans, strategies.booleans, strategies.booleans,
