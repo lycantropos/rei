@@ -17,6 +17,7 @@ namespace py = pybind11;
 #define ENCODING_NAME "Encoding"
 #define EXPRESSION_NAME "Expression"
 #define OPERATION_NAME "Operation"
+#define OPTIONS_NAME "Options"
 #define PARSE_FLAG_NAME "ParseFlag"
 #define PARSE_STATE_NAME "ParseState"
 #define REGEXP_NAME "Regexp"
@@ -31,6 +32,7 @@ using Encoding = re2::RE2::Options::Encoding;
 using Expression = re2::RE2;
 using Anchor = Expression::Anchor;
 using Operation = re2::RegexpOp;
+using Options = re2::RE2::Options;
 using ParseFlag = re2::Regexp::ParseFlags;
 using ParseState = re2::Regexp::ParseState;
 using Regexp = re2::Regexp;
@@ -299,6 +301,57 @@ PYBIND11_MODULE(MODULE_NAME, m) {
       .value("CHAR_CLASS", Operation::kRegexpCharClass)
       .value("HAVE_MATCH", Operation::kRegexpHaveMatch)
       .value("MAX_OPERATION", Operation::kMaxRegexpOp);
+
+  py::class_<Options>(m, OPTIONS_NAME)
+      .def(py::init([](Encoding encoding, bool posix_syntax, bool longest_match,
+                       bool log_errors, std::int64_t max_memory, bool literal,
+                       bool never_nl, bool dot_nl, bool never_capture,
+                       bool case_sensitive, bool perl_classes,
+                       bool word_boundary, bool one_line) {
+             Options result;
+             result.set_encoding(encoding);
+             result.set_posix_syntax(posix_syntax);
+             result.set_longest_match(longest_match);
+             result.set_log_errors(log_errors);
+             result.set_max_mem(max_memory);
+             result.set_literal(literal);
+             result.set_never_nl(never_nl);
+             result.set_dot_nl(dot_nl);
+             result.set_never_capture(never_capture);
+             result.set_case_sensitive(case_sensitive);
+             result.set_perl_classes(perl_classes);
+             result.set_word_boundary(word_boundary);
+             result.set_one_line(one_line);
+             return result;
+           }),
+           py::arg("encoding") = Encoding::EncodingUTF8,
+           py::arg("posix_syntax") = false, py::arg("longest_match") = false,
+           py::arg("log_errors") = true,
+           py::arg("max_memory") = Options::kDefaultMaxMem,
+           py::arg("literal") = false, py::arg("never_nl") = false,
+           py::arg("dot_nl") = false, py::arg("never_capture") = false,
+           py::arg("case_sensitive") = true, py::arg("perl_classes") = false,
+           py::arg("word_boundary") = false, py::arg("one_line") = false)
+      .def_property("encoding", &Options::encoding, &Options::set_encoding)
+      .def_property("posix_syntax", &Options::posix_syntax,
+                    &Options::set_posix_syntax)
+      .def_property("longest_match", &Options::longest_match,
+                    &Options::set_longest_match)
+      .def_property("log_errors", &Options::log_errors,
+                    &Options::set_log_errors)
+      .def_property("max_memory", &Options::max_mem, &Options::set_max_mem)
+      .def_property("literal", &Options::literal, &Options::set_literal)
+      .def_property("never_nl", &Options::never_nl, &Options::set_never_nl)
+      .def_property("dot_nl", &Options::dot_nl, &Options::set_dot_nl)
+      .def_property("never_capture", &Options::never_capture,
+                    &Options::set_never_capture)
+      .def_property("case_sensitive", &Options::case_sensitive,
+                    &Options::set_case_sensitive)
+      .def_property("perl_classes", &Options::perl_classes,
+                    &Options::set_perl_classes)
+      .def_property("word_boundary", &Options::word_boundary,
+                    &Options::set_word_boundary)
+      .def_property("one_line", &Options::one_line, &Options::set_one_line);
 
   py::enum_<ParseFlag>(m, PARSE_FLAG_NAME)
       .value("NO_PARSE_FLAGS", ParseFlag::NoParseFlags)
