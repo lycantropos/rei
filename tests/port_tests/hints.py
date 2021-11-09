@@ -2,6 +2,7 @@ from rei.anchor import Anchor as PortedAnchor
 from rei.encoding import Encoding as PortedEncoding
 from rei.expression import Expression as PortedExpression
 from rei.operation import Operation as PortedOperation
+from rei.options import Options as PortedOptions
 from rei.parse_flag import ParseFlag as PortedParseFlag
 from rei.parse_state import ParseState as PortedParseState
 from rei.rune import Rune as PortedRune
@@ -12,6 +13,7 @@ PortedAnchor = PortedAnchor
 PortedEncoding = PortedEncoding
 PortedExpression = PortedExpression
 PortedOperation = PortedOperation
+PortedOptions = PortedOptions
 PortedParseFlag = PortedParseFlag
 PortedParseState = PortedParseState
 PortedRune = PortedRune

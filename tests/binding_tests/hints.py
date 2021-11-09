@@ -2,6 +2,7 @@ from _rei import (Anchor as BoundAnchor,
                   Encoding as BoundEncoding,
                   Expression as BoundExpression,
                   Operation as BoundOperation,
+                  Options as BoundOptions,
                   ParseFlag as BoundParseFlag,
                   ParseState as BoundParseState,
                   Rune as BoundRune,
@@ -12,6 +13,7 @@ BoundAnchor = BoundAnchor
 BoundEncoding = BoundEncoding
 BoundExpression = BoundExpression
 BoundOperation = BoundOperation
+BoundOptions = BoundOptions
 BoundParseFlag = BoundParseFlag
 BoundParseState = BoundParseState
 BoundRune = BoundRune

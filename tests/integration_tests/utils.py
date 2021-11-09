@@ -2,6 +2,7 @@ from enum import Enum
 from typing import Type
 
 from tests.binding_tests.hints import (BoundEncoding,
+                                       BoundOptions,
                                        BoundParseFlag,
                                        BoundParseState,
                                        BoundRune,
@@ -11,6 +12,7 @@ from tests.integration_tests.hints import (BoundPortedEncodingsPair,
                                            BoundPortedParseFlagsPair,
                                            BoundPortedStatusCodesPair)
 from tests.port_tests.hints import (PortedEncoding,
+                                    PortedOptions,
                                     PortedParseFlag,
                                     PortedParseState,
                                     PortedRune,
@@ -26,6 +28,23 @@ def are_bound_ported_runes_equivalent(bound: BoundRune,
 def are_bound_ported_statuses_equivalent(bound: BoundStatus,
                                          ported: PortedStatus) -> bool:
     return bound.code == ported.code and bound.error_arg == ported.error_arg
+
+
+def are_bound_ported_options_equivalent(bound: BoundOptions,
+                                        ported: PortedOptions) -> bool:
+    return (bound.encoding == ported.encoding
+            and bound.posix_syntax is ported.posix_syntax
+            and bound.longest_match is ported.longest_match
+            and bound.log_errors is ported.log_errors
+            and bound.max_memory == ported.max_memory
+            and bound.literal is ported.literal
+            and bound.never_nl is ported.never_nl
+            and bound.dot_nl is ported.dot_nl
+            and bound.never_capture is ported.never_capture
+            and bound.case_sensitive is ported.case_sensitive
+            and bound.perl_classes is ported.perl_classes
+            and bound.word_boundary is ported.word_boundary
+            and bound.one_line is ported.one_line)
 
 
 def are_bound_ported_parse_states_equivalent(bound: BoundParseState,
