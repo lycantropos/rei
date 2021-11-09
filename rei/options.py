@@ -1,3 +1,4 @@
+from .canned_option import CannedOption
 from .encoding import Encoding
 
 
@@ -29,3 +30,12 @@ class Options:
         self.perl_classes = perl_classes
         self.word_boundary = word_boundary
         self.one_line = one_line
+
+    @classmethod
+    def from_canned_option(cls, option: CannedOption) -> 'Options':
+        return cls(encoding=(Encoding.LATIN_1
+                             if option is CannedOption.LATIN_1
+                             else Encoding.UTF_8),
+                   posix_syntax=option is CannedOption.POSIX,
+                   longest_match=option is CannedOption.POSIX,
+                   log_errors=option is not CannedOption.QUIET)
