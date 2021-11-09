@@ -1,5 +1,6 @@
 #include <pybind11/operators.h>
 #include <pybind11/pybind11.h>
+#include <re2/prog.h>
 #include <re2/re2.h>
 #include <re2/regexp.h>
 #include <util/utf.h>
@@ -17,6 +18,7 @@ namespace py = pybind11;
 #define CANNED_OPTION_NAME "CannedOption"
 #define ENCODING_NAME "Encoding"
 #define EXPRESSION_NAME "Expression"
+#define INSTRUCTION_NAME "Instruction"
 #define OPERATION_NAME "Operation"
 #define OPTIONS_NAME "Options"
 #define PARSE_FLAG_NAME "ParseFlag"
@@ -29,10 +31,11 @@ namespace py = pybind11;
 #define VERSION_INFO "dev"
 #endif
 
-using Anchor = Expression::Anchor;
+using Anchor = re2::RE2::Anchor;
 using CannedOption = re2::RE2::CannedOptions;
 using Encoding = re2::RE2::Options::Encoding;
 using Expression = re2::RE2;
+using Instruction = re2::Prog::Inst;
 using Operation = re2::RegexpOp;
 using Options = re2::RE2::Options;
 using ParseFlag = re2::Regexp::ParseFlags;
@@ -334,6 +337,8 @@ PYBIND11_MODULE(MODULE_NAME, m) {
   py::enum_<Encoding>(m, ENCODING_NAME)
       .value("UTF_8", Encoding::EncodingUTF8)
       .value("LATIN_1", Encoding::EncodingLatin1);
+
+  py::class_<Instruction>(m, INSTRUCTION_NAME).def(py::init());
 
   py::enum_<Operation>(m, OPERATION_NAME)
       .value("NO_MATCH", Operation::kRegexpNoMatch)
