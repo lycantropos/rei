@@ -100,6 +100,22 @@ static std::ostream& operator<<(std::ostream& stream, const py::bytes& bytes) {
   return stream << "bytes([" << join(components, ", ") << "])";
 }
 
+static std::ostream& operator<<(std::ostream& stream, const Encoding& value) {
+  stream << C_STR(MODULE_NAME) "." ENCODING_NAME ".";
+  switch (value) {
+    case Encoding::EncodingLatin1:
+      stream << "LATIN_1";
+      break;
+    case Encoding::EncodingUTF8:
+      stream << "UTF_8";
+      break;
+    default:
+      stream << "???";
+      break;
+  }
+  return stream;
+}
+
 static std::ostream& operator<<(std::ostream& stream, const ParseFlag& value) {
   stream << C_STR(MODULE_NAME) "." STATUS_CODE_NAME ".";
   switch (value) {
@@ -234,6 +250,39 @@ static std::ostream& operator<<(std::ostream& stream, const Status& status) {
                 << ", '" << status.error_arg() << "')";
 }
 
+static void write_bool(std::ostream& stream, bool value) {
+  stream << (value ? "True" : "False");
+}
+
+static std::ostream& operator<<(std::ostream& stream, const Options& options) {
+  stream << C_STR(MODULE_NAME) "." OPTIONS_NAME "(" << options.encoding()
+         << ", ";
+  write_bool(stream, options.posix_syntax());
+  stream << ", ";
+  write_bool(stream, options.longest_match());
+  stream << ", ";
+  write_bool(stream, options.log_errors());
+  stream << ", ";
+  write_bool(stream, options.max_mem());
+  stream << ", ";
+  write_bool(stream, options.literal());
+  stream << ", ";
+  write_bool(stream, options.never_nl());
+  stream << ", ";
+  write_bool(stream, options.dot_nl());
+  stream << ", ";
+  write_bool(stream, options.never_capture());
+  stream << ", ";
+  write_bool(stream, options.case_sensitive());
+  stream << ", ";
+  write_bool(stream, options.perl_classes());
+  stream << ", ";
+  write_bool(stream, options.word_boundary());
+  stream << ", ";
+  write_bool(stream, options.one_line());
+  return stream << ")";
+}
+
 template <class Object>
 std::string repr(const Object& object) {
   std::ostringstream stream;
@@ -342,6 +391,7 @@ PYBIND11_MODULE(MODULE_NAME, m) {
            py::arg("word_boundary") = false, py::arg("one_line") = false)
       .def_static("from_canned_option",
                   [](CannedOption option) { return Options(option); })
+      .def("__repr__", repr<Options>)
       .def_property("encoding", &Options::encoding, &Options::set_encoding)
       .def_property("posix_syntax", &Options::posix_syntax,
                     &Options::set_posix_syntax)
