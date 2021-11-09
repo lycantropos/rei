@@ -1,3 +1,5 @@
+from reprit.base import generate_repr
+
 from .canned_option import CannedOption
 from .encoding import Encoding
 
@@ -39,3 +41,5 @@ class Options:
                    posix_syntax=option is CannedOption.POSIX,
                    longest_match=option is CannedOption.POSIX,
                    log_errors=option is not CannedOption.QUIET)
+
+    __repr__ = generate_repr(__init__)
