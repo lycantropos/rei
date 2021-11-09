@@ -29,10 +29,10 @@ namespace py = pybind11;
 #define VERSION_INFO "dev"
 #endif
 
+using Anchor = Expression::Anchor;
 using CannedOption = re2::RE2::CannedOptions;
 using Encoding = re2::RE2::Options::Encoding;
 using Expression = re2::RE2;
-using Anchor = Expression::Anchor;
 using Operation = re2::RegexpOp;
 using Options = re2::RE2::Options;
 using ParseFlag = re2::Regexp::ParseFlags;
