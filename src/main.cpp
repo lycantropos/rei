@@ -14,6 +14,7 @@ namespace py = pybind11;
 #define C_STR_HELPER(a) #a
 #define C_STR(a) C_STR_HELPER(a)
 #define ANCHOR_NAME "Anchor"
+#define ENCODING_NAME "Encoding"
 #define EXPRESSION_NAME "Expression"
 #define OPERATION_NAME "Operation"
 #define PARSE_FLAG_NAME "ParseFlag"
@@ -26,6 +27,7 @@ namespace py = pybind11;
 #define VERSION_INFO "dev"
 #endif
 
+using Encoding = re2::RE2::Options::Encoding;
 using Expression = re2::RE2;
 using Anchor = Expression::Anchor;
 using Operation = re2::RegexpOp;
@@ -269,6 +271,10 @@ PYBIND11_MODULE(MODULE_NAME, m) {
       .value("NONE", Anchor::UNANCHORED)
       .value("START", Anchor::ANCHOR_START)
       .value("BOTH", Anchor::ANCHOR_BOTH);
+
+  py::enum_<Encoding>(m, ENCODING_NAME)
+      .value("UTF_8", Encoding::EncodingUTF8)
+      .value("LATIN_1", Encoding::EncodingLatin1);
 
   py::enum_<Operation>(m, OPERATION_NAME)
       .value("NO_MATCH", Operation::kRegexpNoMatch)
