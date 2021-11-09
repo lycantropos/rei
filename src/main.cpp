@@ -14,6 +14,7 @@ namespace py = pybind11;
 #define C_STR_HELPER(a) #a
 #define C_STR(a) C_STR_HELPER(a)
 #define ANCHOR_NAME "Anchor"
+#define CANNED_OPTION_NAME "CannedOption"
 #define ENCODING_NAME "Encoding"
 #define EXPRESSION_NAME "Expression"
 #define OPERATION_NAME "Operation"
@@ -28,6 +29,7 @@ namespace py = pybind11;
 #define VERSION_INFO "dev"
 #endif
 
+using CannedOption = re2::RE2::CannedOptions;
 using Encoding = re2::RE2::Options::Encoding;
 using Expression = re2::RE2;
 using Anchor = Expression::Anchor;
@@ -268,6 +270,12 @@ struct type_caster<StringPiece> {
 PYBIND11_MODULE(MODULE_NAME, m) {
   m.doc() = R"pbdoc(Python binding of `re2` C++ library.)pbdoc";
   m.attr("__version__") = C_STR(VERSION_INFO);
+
+  py::enum_<CannedOption>(m, CANNED_OPTION_NAME)
+      .value("DEFAULT", CannedOption::DefaultOptions)
+      .value("LATIN_1", CannedOption::Latin1)
+      .value("POSIX", CannedOption::POSIX)
+      .value("QUIET", CannedOption::Quiet);
 
   py::enum_<Anchor>(m, ANCHOR_NAME)
       .value("NONE", Anchor::UNANCHORED)
