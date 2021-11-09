@@ -462,6 +462,7 @@ PYBIND11_MODULE(MODULE_NAME, m) {
       .def_property("error_arg", &Status::error_arg, &Status::set_error_arg);
 
   py::class_<Expression>(m, EXPRESSION_NAME)
-      .def(py::init<const std::string&>())
+      .def(py::init<const std::string&, const Options&>(), py::arg("pattern"),
+           py::arg("options") = Options(CannedOption::DefaultOptions))
       .def_property_readonly("pattern", &Expression::pattern);
 }
