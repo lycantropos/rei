@@ -340,6 +340,8 @@ PYBIND11_MODULE(MODULE_NAME, m) {
            py::arg("dot_nl") = false, py::arg("never_capture") = false,
            py::arg("case_sensitive") = true, py::arg("perl_classes") = false,
            py::arg("word_boundary") = false, py::arg("one_line") = false)
+      .def_static("from_canned_option",
+                  [](CannedOption option) { return Options(option); })
       .def_property("encoding", &Options::encoding, &Options::set_encoding)
       .def_property("posix_syntax", &Options::posix_syntax,
                     &Options::set_posix_syntax)
