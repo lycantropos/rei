@@ -461,10 +461,16 @@ class Regexp {
   friend class ParseState;
 
   // Get.  No set, Regexps are logically immutable once created.
-  RegexpOp op() { return static_cast<RegexpOp>(op_); }
-  int nsub() { return nsub_; }
-  bool simple() { return simple_ != 0; }
-  ParseFlags parse_flags() { return static_cast<ParseFlags>(parse_flags_); }
+  RegexpOp op() const { return static_cast<RegexpOp>(op_); }
+
+  int nsub() const { return nsub_; }
+
+  bool simple() const { return simple_ != 0; }
+
+  ParseFlags parse_flags() const {
+    return static_cast<ParseFlags>(parse_flags_);
+  }
+
   int Ref();  // For testing.
 
   Regexp** sub() {
@@ -474,39 +480,47 @@ class Regexp {
       return submany_;
   }
 
-  int min() {
+  int min() const {
     DCHECK_EQ(op_, kRegexpRepeat);
     return min_;
   }
-  int max() {
+
+  int max() const {
     DCHECK_EQ(op_, kRegexpRepeat);
     return max_;
   }
-  Rune rune() {
+
+  Rune rune() const {
     DCHECK_EQ(op_, kRegexpLiteral);
     return rune_;
   }
+
   CharClass* cc() {
     DCHECK_EQ(op_, kRegexpCharClass);
     return cc_;
   }
-  int cap() {
+
+  int cap() const {
     DCHECK_EQ(op_, kRegexpCapture);
     return cap_;
   }
-  const std::string* name() {
+
+  const std::string* name() const {
     DCHECK_EQ(op_, kRegexpCapture);
     return name_;
   }
+
   Rune* runes() {
     DCHECK_EQ(op_, kRegexpLiteralString);
     return runes_;
   }
-  int nrunes() {
+
+  int nrunes() const {
     DCHECK_EQ(op_, kRegexpLiteralString);
     return nrunes_;
   }
-  int match_id() {
+
+  int match_id() const {
     DCHECK_EQ(op_, kRegexpHaveMatch);
     return match_id_;
   }
