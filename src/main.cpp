@@ -464,6 +464,15 @@ PYBIND11_MODULE(MODULE_NAME, m) {
 
   py::class_<Program>(m, PROGRAM_NAME)
       .def(py::init())
+      .def("__getitem__",
+           [](const Program& self, std::size_t index) {
+             if (index >= self.size())
+               throw py::index_error("Index should be in range(" +
+                                     std::to_string(0) + ", " +
+                                     std::to_string(self.size()) + "), but got " +
+                                     std::to_string(index) + ".");
+             return self.inst(index);
+           })
       .def("__len__", &Program::size)
       .def("__str__", &Program::Dump);
 
