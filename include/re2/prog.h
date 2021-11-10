@@ -63,10 +63,10 @@ class Prog {
   // Single instruction in regexp program.
   class Inst {
    public:
-    // See the assertion below for why this is so.
+    // See the assertion below for why this is so
     Inst() = default;
 
-    // Copyable.
+    // Copyable
     Inst(const Inst&) = default;
 
     Inst& operator=(const Inst&) = default;
