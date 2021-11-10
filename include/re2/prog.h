@@ -232,25 +232,45 @@ class Prog {
   };
 
   const Inst* inst(int id) const { return &inst_[id]; }
+
   Inst* inst(int id) { return &inst_[id]; }
+
   int start() const { return start_; }
+
   void set_start(int start) { start_ = start; }
+
   int start_unanchored() const { return start_unanchored_; }
+
   void set_start_unanchored(int start) { start_unanchored_ = start; }
+
   int size() const { return size_; }
+
   bool reversed() const { return reversed_; }
+
   void set_reversed(bool reversed) { reversed_ = reversed; }
+
   int list_count() const { return list_count_; }
+
   int inst_count(InstOp op) const { return inst_count_[op]; }
+
   const uint16_t* list_heads() const { return list_heads_.data(); }
+
   int64_t dfa_mem() const { return dfa_mem_; }
+
   void set_dfa_mem(int64_t dfa_mem) { dfa_mem_ = dfa_mem; }
+
   bool anchor_start() const { return anchor_start_; }
+
   void set_anchor_start(bool b) { anchor_start_ = b; }
+
   bool anchor_end() const { return anchor_end_; }
+
   void set_anchor_end(bool b) { anchor_end_ = b; }
+
   int bytemap_range() const { return bytemap_range_; }
+
   const uint8_t* bytemap() const { return bytemap_; }
+
   bool can_prefix_accel() const { return prefix_size_ != 0; }
 
   // Accelerates to the first likely occurrence of the prefix.
@@ -353,6 +373,7 @@ class Prog {
   // Bit-state backtracking.  Fast on small cases but uses memory
   // proportional to the product of the list count and the text size.
   bool CanBitState() const { return list_heads_.data() != NULL; }
+
   bool SearchBitState(const StringPiece& text, const StringPiece& context,
                       Anchor anchor, MatchKind kind, StringPiece* match,
                       int nmatch) const;
