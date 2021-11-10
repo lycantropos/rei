@@ -54,7 +54,7 @@ class BitState {
   bool TrySearch(int id, const char* p);
 
   // Search parameters
-  const Prog* prog_;             // program being run
+  const Prog* prog_;       // program being run
   StringPiece text_;       // text being searched
   StringPiece context_;    // greater context of text being searched
   bool anchored_;          // whether search is anchored at text.begin()

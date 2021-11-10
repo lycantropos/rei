@@ -309,7 +309,7 @@ class DFA {
   }
 
   // Constant after initialization.
-  const Prog* prog_;            // The regular expression program to run.
+  const Prog* prog_;      // The regular expression program to run.
   Prog::MatchKind kind_;  // The kind of DFA.
   bool init_failed_;      // initialization failed (out of memory)
 

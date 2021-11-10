@@ -903,7 +903,8 @@ static int FindLSBSet(uint32_t n) {
 }
 #endif
 
-const void* Prog::PrefixAccel_FrontAndBack(const void* data, size_t size) const {
+const void* Prog::PrefixAccel_FrontAndBack(const void* data,
+                                           size_t size) const {
   DCHECK_GE(prefix_size_, 2);
   if (size < prefix_size_) return NULL;
   // Don't bother searching the last prefix_size_-1 bytes for prefix_front_.

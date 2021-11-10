@@ -113,7 +113,7 @@ class NFA {
     memmove(dst, src, ncapture_ * sizeof src[0]);
   }
 
-  const Prog* prog_;                // underlying program
+  const Prog* prog_;          // underlying program
   int start_;                 // start instruction in program
   int ncapture_;              // number of submatches to track
   bool longest_;              // whether searching for longest match
