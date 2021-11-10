@@ -359,16 +359,6 @@ class Prog {
 
   static const int kMaxOnePassCapture = 5;  // $0 through $4
 
-  // Backtracking search: the gold standard against which the other
-  // implementations are checked.  FOR TESTING ONLY.
-  // It allocates a ton of memory to avoid running forever.
-  // It is also recursive, so can't use in production (will overflow stacks).
-  // The name "Unsafe" here is supposed to be a flag that
-  // you should not be using this function.
-  bool UnsafeSearchBacktrack(const StringPiece& text,
-                             const StringPiece& context, Anchor anchor,
-                             MatchKind kind, StringPiece* match, int nmatch);
-
   // Computes range for any strings matching regexp. The min and max can in
   // some cases be arbitrarily precise, so the caller gets to specify the
   // maximum desired length of string returned.
