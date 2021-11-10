@@ -266,9 +266,9 @@ class Prog {
   const void* PrefixAccel_FrontAndBack(const void* data, size_t size) const;
 
   // Returns string representation of program for debugging.
-  std::string Dump();
-  std::string DumpUnanchored();
-  std::string DumpByteMap();
+  std::string Dump() const;
+  std::string DumpUnanchored() const;
+  std::string DumpByteMap() const;
 
   // Returns the set of kEmpty flags that are in effect at
   // position p within context.

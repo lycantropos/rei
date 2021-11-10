@@ -159,7 +159,7 @@ static std::string FlattenedProgToString(const Prog* prog, int start) {
   return s;
 }
 
-std::string Prog::Dump() {
+std::string Prog::Dump() const {
   if (did_flatten_) return FlattenedProgToString(this, start_);
 
   Workq q(size_);
@@ -167,7 +167,7 @@ std::string Prog::Dump() {
   return ProgToString(this, &q);
 }
 
-std::string Prog::DumpUnanchored() {
+std::string Prog::DumpUnanchored() const {
   if (did_flatten_) return FlattenedProgToString(this, start_unanchored_);
 
   Workq q(size_);
@@ -175,7 +175,7 @@ std::string Prog::DumpUnanchored() {
   return ProgToString(this, &q);
 }
 
-std::string Prog::DumpByteMap() {
+std::string Prog::DumpByteMap() const {
   std::string map;
   for (int c = 0; c < 256; c++) {
     int b = bytemap_[c];
