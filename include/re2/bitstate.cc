@@ -335,7 +335,7 @@ bool BitState::Search(const StringPiece& text, const StringPiece& context,
 // Bit-state search.
 bool Prog::SearchBitState(const StringPiece& text, const StringPiece& context,
                           Anchor anchor, MatchKind kind, StringPiece* match,
-                          int nmatch) {
+                          int nmatch) const {
   // If full match, we ask for an anchored longest match
   // and then check that match[0] == text.
   // So make sure match[0] exists.

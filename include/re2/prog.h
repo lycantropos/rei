@@ -354,7 +354,7 @@ class Prog {
   bool CanBitState() { return list_heads_.data() != NULL; }
   bool SearchBitState(const StringPiece& text, const StringPiece& context,
                       Anchor anchor, MatchKind kind, StringPiece* match,
-                      int nmatch);
+                      int nmatch) const;
 
   static const int kMaxOnePassCapture = 5;  // $0 through $4
 
