@@ -462,7 +462,9 @@ PYBIND11_MODULE(MODULE_NAME, m) {
       .def_property_readonly("pattern", &ParseState::whole_regexp)
       .def_property_readonly("status", &ParseState::status);
 
-  py::class_<Program>(m, PROGRAM_NAME).def(py::init());
+  py::class_<Program>(m, PROGRAM_NAME)
+      .def(py::init())
+      .def("__str__", &Program::Dump);
 
   struct RegexpDeleter {
     void operator()(Regexp* self) const noexcept { self->Decref(); }
