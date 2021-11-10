@@ -90,14 +90,19 @@ static std::string join(const Iterable& elements,
                         const std::string& separator) {
   const auto begin = std::begin(elements);
   const auto end = std::end(elements);
-  if (begin == end) return std::string();
-  return std::accumulate(
-      std::next(begin), end, std::string(*begin),
-      [&separator](const std::string& result,
-                   const typename Iterable::value_type& value) {
-        return result + separator + std::string(value);
-      });
+  return begin == end
+             ? std::string()
+             : std::accumulate(
+                   std::next(begin), end, std::string(*begin),
+                   [&separator](const std::string& result,
+                                const typename Iterable::value_type& value) {
+                     return result + separator + std::string(value);
+                   });
 };
+
+static void write_bool(std::ostream& stream, bool value) {
+  stream << (value ? "True" : "False");
+}
 
 static std::ostream& operator<<(std::ostream& stream, const py::bytes& bytes) {
   std::vector<py::str> components;
@@ -253,10 +258,6 @@ static std::ostream& operator<<(std::ostream& stream, const StatusCode& value) {
 static std::ostream& operator<<(std::ostream& stream, const Status& status) {
   return stream << C_STR(MODULE_NAME) "." STATUS_NAME "(" << status.code()
                 << ", '" << status.error_arg() << "')";
-}
-
-static void write_bool(std::ostream& stream, bool value) {
-  stream << (value ? "True" : "False");
 }
 
 static std::ostream& operator<<(std::ostream& stream, const Options& options) {
