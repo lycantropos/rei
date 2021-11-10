@@ -30,7 +30,6 @@
 
 #include <algorithm>
 #include <deque>
-#include <mutex>
 #include <new>
 #include <unordered_map>
 #include <utility>
