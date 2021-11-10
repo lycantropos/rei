@@ -212,7 +212,7 @@ static inline OneState* IndexToNode(uint8_t* nodes, int statesize,
 
 bool Prog::SearchOnePass(const StringPiece& text,
                          const StringPiece& const_context, Anchor anchor,
-                         MatchKind kind, StringPiece* match, int nmatch) {
+                         MatchKind kind, StringPiece* match, int nmatch) const {
   if (anchor != kAnchored && kind != kFullMatch) {
     LOG(DFATAL) << "Cannot use SearchOnePass for unanchored matches.";
     return false;
@@ -239,7 +239,7 @@ bool Prog::SearchOnePass(const StringPiece& text,
   int statesize = sizeof(OneState) + bytemap_range() * sizeof(uint32_t);
   // start() is always mapped to the zeroth OneState.
   OneState* state = IndexToNode(nodes, statesize, 0);
-  uint8_t* bytemap = bytemap_;
+  const uint8_t* bytemap = bytemap_;
   const char* bp = text.data();
   const char* ep = text.data() + text.size();
   const char* p;
