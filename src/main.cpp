@@ -464,6 +464,7 @@ PYBIND11_MODULE(MODULE_NAME, m) {
 
   py::class_<Program>(m, PROGRAM_NAME)
       .def(py::init())
+      .def("__len__", &Program::size)
       .def("__str__", &Program::Dump);
 
   struct RegexpDeleter {
