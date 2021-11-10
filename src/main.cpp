@@ -467,12 +467,18 @@ PYBIND11_MODULE(MODULE_NAME, m) {
       .def("__getitem__",
            [](const Program& self, std::size_t index) {
              if (index >= self.size())
-               throw py::index_error("Index should be in range(" +
-                                     std::to_string(0) + ", " +
-                                     std::to_string(self.size()) + "), but got " +
-                                     std::to_string(index) + ".");
+               throw py::index_error(
+                   "Index should be in range(" + std::to_string(0) + ", " +
+                   std::to_string(self.size()) + "), but got " +
+                   std::to_string(index) + ".");
              return self.inst(index);
            })
+      .def(
+          "__iter__",
+          [](const Program& self) {
+            return py::make_iterator(self.inst(0), self.inst(self.size()));
+          },
+          py::keep_alive<0, 1>())
       .def("__len__", &Program::size)
       .def("__str__", &Program::Dump);
 
