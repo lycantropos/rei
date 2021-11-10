@@ -72,7 +72,7 @@ void Prog::Inst::InitFail() {
   set_opcode(kInstFail);
 }
 
-std::string Prog::Inst::Dump() {
+std::string Prog::Inst::Dump() const {
   switch (opcode()) {
     default:
       return StringPrintf("opcode %d", static_cast<int>(opcode()));

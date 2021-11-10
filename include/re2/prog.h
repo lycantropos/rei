@@ -81,43 +81,54 @@ class Prog {
 
     // Getters
     int id(Prog* p) { return static_cast<int>(this - p->inst_.data()); }
-    InstOp opcode() { return static_cast<InstOp>(out_opcode_ & 7); }
-    int last() { return (out_opcode_ >> 3) & 1; }
-    int out() { return out_opcode_ >> 4; }
-    int out1() {
+
+    InstOp opcode() const { return static_cast<InstOp>(out_opcode_ & 7); }
+
+    int last() const { return (out_opcode_ >> 3) & 1; }
+
+    int out() const { return out_opcode_ >> 4; }
+
+    int out1() const {
       DCHECK(opcode() == kInstAlt || opcode() == kInstAltMatch);
       return out1_;
     }
-    int cap() {
+
+    int cap() const {
       DCHECK_EQ(opcode(), kInstCapture);
       return cap_;
     }
-    int lo() {
+
+    int lo() const {
       DCHECK_EQ(opcode(), kInstByteRange);
       return lo_;
     }
-    int hi() {
+
+    int hi() const {
       DCHECK_EQ(opcode(), kInstByteRange);
       return hi_;
     }
-    int foldcase() {
+
+    int foldcase() const {
       DCHECK_EQ(opcode(), kInstByteRange);
       return hint_foldcase_ & 1;
     }
-    int hint() {
+
+    int hint() const {
       DCHECK_EQ(opcode(), kInstByteRange);
       return hint_foldcase_ >> 1;
     }
-    int match_id() {
+
+    int match_id() const {
       DCHECK_EQ(opcode(), kInstMatch);
       return match_id_;
     }
-    EmptyOp empty() {
+
+    EmptyOp empty() const {
       DCHECK_EQ(opcode(), kInstEmptyWidth);
       return empty_;
     }
 
-    bool greedy(Prog* p) {
+    bool greedy(Prog* p) const {
       DCHECK_EQ(opcode(), kInstAltMatch);
       return p->inst(out())->opcode() == kInstByteRange ||
              (p->inst(out())->opcode() == kInstNop &&
@@ -125,14 +136,14 @@ class Prog {
     }
 
     // Does this inst (an kInstByteRange) match c?
-    inline bool Matches(int c) {
+    inline bool Matches(int c) const {
       DCHECK_EQ(opcode(), kInstByteRange);
       if (foldcase() && 'A' <= c && c <= 'Z') c += 'a' - 'A';
       return lo_ <= c && c <= hi_;
     }
 
     // Returns string representation for debugging.
-    std::string Dump();
+    std::string Dump() const;
 
     // Maximum instruction id.
     // (Must fit in out_opcode_. PatchList/last steal another bit.)
