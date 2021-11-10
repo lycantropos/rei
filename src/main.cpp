@@ -23,6 +23,7 @@ namespace py = pybind11;
 #define OPTIONS_NAME "Options"
 #define PARSE_FLAG_NAME "ParseFlag"
 #define PARSE_STATE_NAME "ParseState"
+#define PROGRAM_NAME "Program"
 #define REGEXP_NAME "Regexp"
 #define RUNE_NAME "Rune"
 #define STATUS_NAME "Status"
@@ -40,6 +41,7 @@ using Operation = re2::RegexpOp;
 using Options = re2::RE2::Options;
 using ParseFlag = re2::Regexp::ParseFlags;
 using ParseState = re2::Regexp::ParseState;
+using Program = re2::Prog;
 using Regexp = re2::Regexp;
 
 class Rune {
@@ -452,6 +454,8 @@ PYBIND11_MODULE(MODULE_NAME, m) {
       .def_property_readonly("flag", &ParseState::flags)
       .def_property_readonly("pattern", &ParseState::whole_regexp)
       .def_property_readonly("status", &ParseState::status);
+
+  py::class_<Program>(m, PROGRAM_NAME).def(py::init());
 
   struct RegexpDeleter {
     void operator()(Regexp* self) const noexcept { self->Decref(); }
