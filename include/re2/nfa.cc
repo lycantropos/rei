@@ -233,7 +233,7 @@ void NFA::AddToThreadq(Threadq* q, int id0, int c, const StringPiece& context,
     Thread** tp = &q->get_existing(id);
     int j;
     Thread* t;
-    Prog::Inst* ip = prog_->inst(id);
+    const Prog::Inst* ip = prog_->inst(id);
     switch (ip->opcode()) {
       default:
         LOG(DFATAL) << "unhandled " << ip->opcode() << " in AddToThreadq";
@@ -335,7 +335,7 @@ int NFA::Step(Threadq* runq, Threadq* nextq, int c, const StringPiece& context,
     }
 
     int id = i->index();
-    Prog::Inst* ip = prog_->inst(id);
+    const Prog::Inst* ip = prog_->inst(id);
 
     switch (ip->opcode()) {
       default:
@@ -515,7 +515,7 @@ bool NFA::Search(const StringPiece& text, const StringPiece& const_context,
       // We're done: full match ahead.
       p = etext_;
       for (;;) {
-        Prog::Inst* ip = prog_->inst(id);
+        const Prog::Inst* ip = prog_->inst(id);
         switch (ip->opcode()) {
           default:
             LOG(DFATAL) << "Unexpected opcode in short circuit: "
@@ -639,7 +639,7 @@ void Prog::Fanout(SparseArray<int>* fanout) {
     reachable.insert(i->index());
     for (SparseSet::iterator j = reachable.begin(); j != reachable.end(); ++j) {
       int id = *j;
-      Prog::Inst* ip = inst(id);
+      const Prog::Inst* ip = inst(id);
       switch (ip->opcode()) {
         default:
           LOG(DFATAL) << "unhandled " << ip->opcode() << " in Prog::Fanout()";

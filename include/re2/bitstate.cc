@@ -39,7 +39,7 @@ struct Job {
 
 class BitState {
  public:
-  explicit BitState(Prog* prog);
+  explicit BitState(const Prog* prog);
 
   // The usual Search prototype.
   // Can only call Search once per BitState.
@@ -54,7 +54,7 @@ class BitState {
   bool TrySearch(int id, const char* p);
 
   // Search parameters
-  Prog* prog_;             // program being run
+  const Prog* prog_;             // program being run
   StringPiece text_;       // text being searched
   StringPiece context_;    // greater context of text being searched
   bool anchored_;          // whether search is anchored at text.begin()
@@ -74,7 +74,7 @@ class BitState {
   BitState& operator=(const BitState&) = delete;
 };
 
-BitState::BitState(Prog* prog)
+BitState::BitState(const Prog* prog)
     : prog_(prog),
       anchored_(false),
       longest_(false),
@@ -163,7 +163,7 @@ bool BitState::TrySearch(int id0, const char* p0) {
 
   Loop:
     // Visit id, p.
-    Prog::Inst* ip = prog_->inst(id);
+    const Prog::Inst* ip = prog_->inst(id);
     switch (ip->opcode()) {
       default:
         LOG(DFATAL) << "Unexpected opcode: " << ip->opcode();

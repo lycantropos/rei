@@ -134,11 +134,11 @@ static inline void AddToQueue(Workq* q, int id) {
   if (id != 0) q->insert(id);
 }
 
-static std::string ProgToString(Prog* prog, Workq* q) {
+static std::string ProgToString(const Prog* prog, Workq* q) {
   std::string s;
   for (Workq::iterator i = q->begin(); i != q->end(); ++i) {
     int id = *i;
-    Prog::Inst* ip = prog->inst(id);
+    const Prog::Inst* ip = prog->inst(id);
     s += StringPrintf("%d. %s\n", id, ip->Dump().c_str());
     AddToQueue(q, ip->out());
     if (ip->opcode() == kInstAlt || ip->opcode() == kInstAltMatch)
@@ -147,10 +147,10 @@ static std::string ProgToString(Prog* prog, Workq* q) {
   return s;
 }
 
-static std::string FlattenedProgToString(Prog* prog, int start) {
+static std::string FlattenedProgToString(const Prog* prog, int start) {
   std::string s;
   for (int id = start; id < prog->size(); id++) {
-    Prog::Inst* ip = prog->inst(id);
+    const Prog::Inst* ip = prog->inst(id);
     if (ip->last())
       s += StringPrintf("%d. %s\n", id, ip->Dump().c_str());
     else
@@ -188,7 +188,7 @@ std::string Prog::DumpByteMap() {
 }
 
 // Is ip a guaranteed match at end of text, perhaps after some capturing?
-static bool IsMatch(Prog* prog, Prog::Inst* ip) {
+static bool IsMatch(const Prog* prog, const Prog::Inst* ip) {
   for (;;) {
     switch (ip->opcode()) {
       default:
@@ -226,7 +226,7 @@ void Prog::Optimize() {
 
     Inst* ip = inst(id);
     int j = ip->out();
-    Inst* jp;
+    const Inst* jp;
     while (j != 0 && (jp = inst(j))->opcode() == kInstNop) {
       j = jp->out();
     }
@@ -259,8 +259,8 @@ void Prog::Optimize() {
     if (ip->opcode() == kInstAlt) AddToQueue(&q, ip->out1());
 
     if (ip->opcode() == kInstAlt) {
-      Inst* j = inst(ip->out());
-      Inst* k = inst(ip->out1());
+      const Inst* j = inst(ip->out());
+      const Inst* k = inst(ip->out1());
       if (j->opcode() == kInstByteRange && j->out() == id && j->lo() == 0x00 &&
           j->hi() == 0xFF && IsMatch(this, k)) {
         ip->set_opcode(kInstAltMatch);
@@ -437,7 +437,7 @@ void Prog::ComputeByteMap() {
   bool marked_word_boundaries = false;
 
   for (int id = 0; id < size(); id++) {
-    Inst* ip = inst(id);
+    const Inst* ip = inst(id);
     if (ip->opcode() == kInstByteRange) {
       int lo = ip->lo();
       int hi = ip->hi();
@@ -636,7 +636,7 @@ void Prog::MarkSuccessors(SparseArray<int>* rootmap, SparseArray<int>* predmap,
     if (reachable->contains(id)) continue;
     reachable->insert_new(id);
 
-    Inst* ip = inst(id);
+    const Inst* ip = inst(id);
     switch (ip->opcode()) {
       default:
         LOG(DFATAL) << "unhandled opcode: " << ip->opcode();
@@ -695,7 +695,7 @@ void Prog::MarkDominator(int root, SparseArray<int>* rootmap,
       continue;
     }
 
-    Inst* ip = inst(id);
+    const Inst* ip = inst(id);
     switch (ip->opcode()) {
       default:
         LOG(DFATAL) << "unhandled opcode: " << ip->opcode();
@@ -759,7 +759,7 @@ void Prog::EmitList(int root, SparseArray<int>* rootmap,
       continue;
     }
 
-    Inst* ip = inst(id);
+    const Inst* ip = inst(id);
     switch (ip->opcode()) {
       default:
         LOG(DFATAL) << "unhandled opcode: " << ip->opcode();
@@ -903,7 +903,7 @@ static int FindLSBSet(uint32_t n) {
 }
 #endif
 
-const void* Prog::PrefixAccel_FrontAndBack(const void* data, size_t size) {
+const void* Prog::PrefixAccel_FrontAndBack(const void* data, size_t size) const {
   DCHECK_GE(prefix_size_, 2);
   if (size < prefix_size_) return NULL;
   // Don't bother searching the last prefix_size_-1 bytes for prefix_front_.

@@ -417,7 +417,7 @@ bool Prog::IsOnePass() {
       uint32_t cond = stack[nstack].cond;
 
     Loop:
-      Prog::Inst* ip = inst(id);
+      const Prog::Inst* ip = inst(id);
       switch (ip->opcode()) {
         default:
           LOG(DFATAL) << "unhandled opcode: " << ip->opcode();

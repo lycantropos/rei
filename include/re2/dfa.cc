@@ -594,7 +594,7 @@ DFA::State* DFA::WorkqToCachedState(Workq* q, Workq* mq, uint32_t flag) {
       }
       continue;
     }
-    Prog::Inst* ip = prog_->inst(id);
+    const Prog::Inst* ip = prog_->inst(id);
     switch (ip->opcode()) {
       case kInstAltMatch:
         // This state will continue to a match no matter what
@@ -678,7 +678,7 @@ DFA::State* DFA::WorkqToCachedState(Workq* q, Workq* mq, uint32_t flag) {
     inst[n++] = MatchSep;
     for (Workq::iterator i = mq->begin(); i != mq->end(); ++i) {
       int id = *i;
-      Prog::Inst* ip = prog_->inst(id);
+      const Prog::Inst* ip = prog_->inst(id);
       if (ip->opcode() == kInstMatch) inst[n++] = ip->match_id();
     }
   }
@@ -812,7 +812,7 @@ void DFA::AddToQueue(Workq* q, int id, uint32_t flag) {
     q->insert_new(id);
 
     // Process instruction.
-    Prog::Inst* ip = prog_->inst(id);
+    const Prog::Inst* ip = prog_->inst(id);
     switch (ip->opcode()) {
       default:
         LOG(DFATAL) << "unhandled opcode: " << ip->opcode();
@@ -896,7 +896,7 @@ void DFA::RunWorkqOnByte(Workq* oldq, Workq* newq, int c, uint32_t flag,
       continue;
     }
     int id = *i;
-    Prog::Inst* ip = prog_->inst(id);
+    const Prog::Inst* ip = prog_->inst(id);
     switch (ip->opcode()) {
       default:
         LOG(DFATAL) << "unhandled opcode: " << ip->opcode();
@@ -919,7 +919,7 @@ void DFA::RunWorkqOnByte(Workq* oldq, Workq* newq, int c, uint32_t flag,
         } else {
           // We have no hint, so we must find the end
           // of the current list and then skip to it.
-          Prog::Inst* ip0 = ip;
+          const Prog::Inst* ip0 = ip;
           while (!ip->last()) ++ip;
           i += ip - ip0;
         }
