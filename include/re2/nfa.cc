@@ -47,7 +47,7 @@ static const bool ExtraDebug = false;
 
 class NFA {
  public:
-  NFA(Prog* prog);
+  NFA(const Prog* prog);
   ~NFA();
 
   // Searches for a matching string.
@@ -113,7 +113,7 @@ class NFA {
     memmove(dst, src, ncapture_ * sizeof src[0]);
   }
 
-  Prog* prog_;                // underlying program
+  const Prog* prog_;                // underlying program
   int start_;                 // start instruction in program
   int ncapture_;              // number of submatches to track
   bool longest_;              // whether searching for longest match
@@ -131,7 +131,7 @@ class NFA {
   NFA& operator=(const NFA&) = delete;
 };
 
-NFA::NFA(Prog* prog) {
+NFA::NFA(const Prog* prog) {
   prog_ = prog;
   start_ = prog_->start();
   ncapture_ = 0;
