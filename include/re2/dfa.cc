@@ -67,7 +67,7 @@ static const bool ExtraDebug = false;
 // the comments in the sections that follow the DFA definition.
 class DFA {
  public:
-  DFA(Prog* prog, Prog::MatchKind kind, int64_t max_mem);
+  DFA(const Prog* prog, Prog::MatchKind kind, int64_t max_mem);
   ~DFA();
   bool ok() const { return !init_failed_; }
   Prog::MatchKind kind() { return kind_; }
@@ -309,7 +309,7 @@ class DFA {
   }
 
   // Constant after initialization.
-  Prog* prog_;            // The regular expression program to run.
+  const Prog* prog_;            // The regular expression program to run.
   Prog::MatchKind kind_;  // The kind of DFA.
   bool init_failed_;      // initialization failed (out of memory)
 
@@ -403,7 +403,7 @@ class DFA::Workq : public SparseSet {
   Workq& operator=(const Workq&) = delete;
 };
 
-DFA::DFA(Prog* prog, Prog::MatchKind kind, int64_t max_mem)
+DFA::DFA(const Prog* prog, Prog::MatchKind kind, int64_t max_mem)
     : prog_(prog),
       kind_(kind),
       init_failed_(false),
