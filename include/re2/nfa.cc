@@ -602,9 +602,8 @@ bool NFA::Search(const StringPiece& text, const StringPiece& const_context,
 
 bool Prog::SearchNFA(const StringPiece& text, const StringPiece& context,
                      Anchor anchor, MatchKind kind, StringPiece* match,
-                     int nmatch) {
+                     int nmatch) const {
   if (ExtraDebug) Dump();
-
   NFA nfa(this);
   StringPiece sp;
   if (kind == kFullMatch) {
