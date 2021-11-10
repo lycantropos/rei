@@ -68,15 +68,22 @@ class Prog {
 
     // Copyable.
     Inst(const Inst&) = default;
+
     Inst& operator=(const Inst&) = default;
 
     // Constructors per opcode
     void InitAlt(uint32_t out, uint32_t out1);
+
     void InitByteRange(int lo, int hi, int foldcase, uint32_t out);
+
     void InitCapture(int cap, uint32_t out);
+
     void InitEmptyWidth(EmptyOp empty, uint32_t out);
+
     void InitMatch(int id);
+
     void InitNop(uint32_t out);
+
     void InitFail();
 
     // Getters
