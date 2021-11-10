@@ -302,7 +302,8 @@ class Prog {
 
   // Search using NFA: can find submatches but kind of slow.
   bool SearchNFA(const StringPiece& text, const StringPiece& context,
-                 Anchor anchor, MatchKind kind, StringPiece* match, int nmatch) const;
+                 Anchor anchor, MatchKind kind, StringPiece* match,
+                 int nmatch) const;
 
   // Search using DFA: much faster than NFA but only finds
   // end of match and can use a lot more memory.
