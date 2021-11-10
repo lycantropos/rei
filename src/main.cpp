@@ -126,6 +126,41 @@ static std::ostream& operator<<(std::ostream& stream, const Encoding& value) {
   return stream;
 }
 
+static std::ostream& operator<<(std::ostream& stream, const Options& options) {
+  stream << C_STR(MODULE_NAME) "." OPTIONS_NAME "(" << options.encoding()
+         << ", ";
+  write_bool(stream, options.posix_syntax());
+  stream << ", ";
+  write_bool(stream, options.longest_match());
+  stream << ", ";
+  write_bool(stream, options.log_errors());
+  stream << ", ";
+  write_bool(stream, options.max_mem());
+  stream << ", ";
+  write_bool(stream, options.literal());
+  stream << ", ";
+  write_bool(stream, options.never_nl());
+  stream << ", ";
+  write_bool(stream, options.dot_nl());
+  stream << ", ";
+  write_bool(stream, options.never_capture());
+  stream << ", ";
+  write_bool(stream, options.case_sensitive());
+  stream << ", ";
+  write_bool(stream, options.perl_classes());
+  stream << ", ";
+  write_bool(stream, options.word_boundary());
+  stream << ", ";
+  write_bool(stream, options.one_line());
+  return stream << ")";
+}
+
+static std::ostream& operator<<(std::ostream& stream,
+                                const Expression& expression) {
+  return stream << C_STR(MODULE_NAME) "." EXPRESSION_NAME "('"
+                << expression.pattern() << "', " << expression.options() << ")";
+}
+
 static std::ostream& operator<<(std::ostream& stream, const ParseFlag& value) {
   stream << C_STR(MODULE_NAME) "." STATUS_CODE_NAME ".";
   switch (value) {
@@ -258,35 +293,6 @@ static std::ostream& operator<<(std::ostream& stream, const StatusCode& value) {
 static std::ostream& operator<<(std::ostream& stream, const Status& status) {
   return stream << C_STR(MODULE_NAME) "." STATUS_NAME "(" << status.code()
                 << ", '" << status.error_arg() << "')";
-}
-
-static std::ostream& operator<<(std::ostream& stream, const Options& options) {
-  stream << C_STR(MODULE_NAME) "." OPTIONS_NAME "(" << options.encoding()
-         << ", ";
-  write_bool(stream, options.posix_syntax());
-  stream << ", ";
-  write_bool(stream, options.longest_match());
-  stream << ", ";
-  write_bool(stream, options.log_errors());
-  stream << ", ";
-  write_bool(stream, options.max_mem());
-  stream << ", ";
-  write_bool(stream, options.literal());
-  stream << ", ";
-  write_bool(stream, options.never_nl());
-  stream << ", ";
-  write_bool(stream, options.dot_nl());
-  stream << ", ";
-  write_bool(stream, options.never_capture());
-  stream << ", ";
-  write_bool(stream, options.case_sensitive());
-  stream << ", ";
-  write_bool(stream, options.perl_classes());
-  stream << ", ";
-  write_bool(stream, options.word_boundary());
-  stream << ", ";
-  write_bool(stream, options.one_line());
-  return stream << ")";
 }
 
 template <class Object>
@@ -524,5 +530,6 @@ PYBIND11_MODULE(MODULE_NAME, m) {
   py::class_<Expression>(m, EXPRESSION_NAME)
       .def(py::init<const std::string&, const Options&>(), py::arg("pattern"),
            py::arg("options") = Options(CannedOption::DefaultOptions))
+      .def("__repr__", repr<Expression>)
       .def_property_readonly("pattern", &Expression::pattern);
 }
