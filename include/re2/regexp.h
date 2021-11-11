@@ -249,21 +249,19 @@ class CharClass {
  public:
   void Delete();
 
-  typedef RuneRange* iterator;
-  iterator begin() { return ranges_; }
-  iterator end() { return ranges_ + nranges_; }
+  typedef const RuneRange* iterator;
+  iterator begin() const { return ranges_; }
+  iterator end() const { return ranges_ + nranges_; }
 
-  int size() { return nrunes_; }
-  bool empty() { return nrunes_ == 0; }
-  bool full() { return nrunes_ == Runemax + 1; }
-  bool FoldsASCII() { return folds_ascii_; }
+  int size() const { return nrunes_; }
+  bool empty() const { return nrunes_ == 0; }
+  bool full() const { return nrunes_ == Runemax + 1; }
+  bool FoldsASCII() const { return folds_ascii_; }
 
-  bool Contains(Rune r);
-  CharClass* Negate();
+  bool Contains(Rune r) const;
+  CharClass* Negate() const;
 
  private:
-  CharClass();   // not implemented
-  ~CharClass();  // not implemented
   static CharClass* New(size_t maxranges);
 
   friend class CharClassBuilder;
@@ -273,8 +271,10 @@ class CharClass {
   RuneRange* ranges_;
   int nranges_;
 
+  CharClass() = delete;
   CharClass(const CharClass&) = delete;
   CharClass& operator=(const CharClass&) = delete;
+  ~CharClass() = delete;
 };
 
 class Regexp {

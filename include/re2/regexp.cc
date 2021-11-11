@@ -892,7 +892,7 @@ void CharClass::Delete() {
   delete[] data;
 }
 
-CharClass* CharClass::Negate() {
+CharClass* CharClass::Negate() const {
   CharClass* cc = CharClass::New(static_cast<size_t>(nranges_ + 1));
   cc->folds_ascii_ = folds_ascii_;
   cc->nrunes_ = Runemax + 1 - nrunes_;
@@ -911,7 +911,7 @@ CharClass* CharClass::Negate() {
   return cc;
 }
 
-bool CharClass::Contains(Rune r) {
+bool CharClass::Contains(Rune r) const {
   RuneRange* rr = ranges_;
   int n = nranges_;
   while (n > 0) {
