@@ -12,6 +12,7 @@ from tests.binding_tests.hints import (BoundCannedOption,
 from tests.integration_tests.hints import (BoundPortedCannedOptionsPair,
                                            BoundPortedEncodingsPair,
                                            BoundPortedParseFlagsPair,
+                                           BoundPortedRunesPair,
                                            BoundPortedStatusCodesPair)
 from tests.port_tests.hints import (PortedCannedOption,
                                     PortedEncoding,
@@ -74,6 +75,10 @@ def to_bound_with_ported_canned_options_pair(value: int
 def to_bound_with_ported_encodings_pair(value: int
                                         ) -> BoundPortedEncodingsPair:
     return BoundEncoding(value), PortedEncoding(value)
+
+
+def to_bound_with_ported_runes_pair(characters: bytes) -> BoundPortedRunesPair:
+    return BoundRune(characters), PortedRune(characters)
 
 
 def to_bound_with_ported_status_codes_pair(value: int
