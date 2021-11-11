@@ -19,6 +19,11 @@ class Rune:
 
     __repr__ = generate_repr(__new__)
 
+    def __eq__(self, other: 'Rune') -> bool:
+        return (self._value == other._value
+                if isinstance(other, Rune)
+                else NotImplemented)
+
     def __lt__(self, other: 'Rune') -> bool:
         return (self._value < other._value
                 if isinstance(other, Rune)
