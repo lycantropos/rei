@@ -539,6 +539,12 @@ PYBIND11_MODULE(MODULE_NAME, m) {
            }),
            py::arg("low"), py::arg("high"))
       .def(
+          "__eq__",
+          [](const RuneRange& self, const RuneRange& other) {
+            return self.lo == other.lo && self.hi == other.hi;
+          },
+          py::is_operator())
+      .def(
           "__lt__",
           [](const RuneRange& self, const RuneRange& other) {
             static re2::RuneRangeLess comparator;
