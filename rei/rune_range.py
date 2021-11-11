@@ -6,11 +6,13 @@ from .rune import Rune
 class RuneRange:
     __slots__ = '_low', '_high'
 
-    def __init__(self, low: Rune, high: Rune) -> None:
+    def __new__(cls, low: Rune, high: Rune) -> 'RuneRange':
+        self = super().__new__(cls)
         self._low = low
         self._high = high
+        return self
 
-    __repr__ = generate_repr(__init__)
+    __repr__ = generate_repr(__new__)
 
     @property
     def high(self) -> Rune:
