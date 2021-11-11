@@ -15,6 +15,11 @@ class Rune:
         self._value = value
         return self
 
+    def __lt__(self, other: 'Rune') -> bool:
+        return (self._value < other._value
+                if isinstance(other, Rune)
+                else NotImplemented)
+
     @property
     def components(self) -> bytes:
         return rune_value_to_characters(self._value)
