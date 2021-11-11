@@ -55,9 +55,11 @@ class Rune {
 
   bool operator==(const Rune& other) const { return _raw == other._raw; }
 
-  operator bool() const { return _raw != re2::Runeerror; }
+  bool operator<(const Rune& other) const { return _raw < other._raw; }
 
-  operator py::str() const {
+  explicit operator bool() const { return _raw != re2::Runeerror; }
+
+  explicit operator py::str() const {
     char* c_string = new char[re2::UTFmax]();
     int size = re2::runetochar(c_string, &_raw);
     py::str result(c_string, size);
@@ -508,6 +510,7 @@ PYBIND11_MODULE(MODULE_NAME, m) {
   py::class_<Rune>(m, RUNE_NAME)
       .def(py::init<const py::bytes&>(), py::arg("components"))
       .def(py::self == py::self)
+      .def(py::self < py::self)
       .def("__bool__", &Rune::operator bool)
       .def("__iter__",
            [](const Rune& self) { return py::iter(self.components()); })
