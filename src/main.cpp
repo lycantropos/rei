@@ -243,6 +243,12 @@ static std::ostream& operator<<(std::ostream& stream, const Rune& rune) {
                 << ")";
 }
 
+static std::ostream& operator<<(std::ostream& stream,
+                                const RuneRange& rune_range) {
+  return stream << C_STR(MODULE_NAME) "." RUNE_RANGE_NAME "(" << rune_range.low
+                << ", " << rune_range.high() << ")";
+}
+
 static std::ostream& operator<<(std::ostream& stream, const StatusCode& value) {
   stream << C_STR(MODULE_NAME) "." STATUS_CODE_NAME ".";
   switch (value) {
@@ -534,6 +540,7 @@ PYBIND11_MODULE(MODULE_NAME, m) {
             return comparator(self, other);
           },
           py::is_operator())
+      .def("__repr__", repr<RuneRange>)
       .def_property_readonly(
           "low", [](const RuneRange& self) { return Rune(self.lo); })
       .def_property_readonly(
