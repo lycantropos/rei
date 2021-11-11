@@ -93,6 +93,10 @@ using Status = re2::RegexpStatus;
 using StatusCode = re2::RegexpStatusCode;
 using StringPiece = re2::StringPiece;
 
+static Rune to_rune_range_high(const RuneRange& self) { return Rune(self.hi); }
+
+static Rune to_rune_range_low(const RuneRange& self) { return Rune(self.lo); }
+
 template <class Iterable>
 static std::string join(const Iterable& elements,
                         const std::string& separator) {
@@ -245,8 +249,9 @@ static std::ostream& operator<<(std::ostream& stream, const Rune& rune) {
 
 static std::ostream& operator<<(std::ostream& stream,
                                 const RuneRange& rune_range) {
-  return stream << C_STR(MODULE_NAME) "." RUNE_RANGE_NAME "(" << rune_range.low
-                << ", " << rune_range.high() << ")";
+  return stream << C_STR(MODULE_NAME) "." RUNE_RANGE_NAME "("
+                << to_rune_range_low(rune_range) << ", "
+                << to_rune_range_high(rune_range) << ")";
 }
 
 static std::ostream& operator<<(std::ostream& stream, const StatusCode& value) {
@@ -541,10 +546,8 @@ PYBIND11_MODULE(MODULE_NAME, m) {
           },
           py::is_operator())
       .def("__repr__", repr<RuneRange>)
-      .def_property_readonly(
-          "low", [](const RuneRange& self) { return Rune(self.lo); })
-      .def_property_readonly(
-          "high", [](const RuneRange& self) { return Rune(self.hi); });
+      .def_property_readonly("high", &to_rune_range_high)
+      .def_property_readonly("low", &to_rune_range_low);
 
   py::enum_<StatusCode> PyStatusCode(m, STATUS_CODE_NAME);
   PyStatusCode.value("SUCCESS", StatusCode::kRegexpSuccess)
