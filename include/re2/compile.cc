@@ -19,6 +19,7 @@
 #include "util/utf.h"
 
 namespace re2 {
+static const PatchList kNullPatchList = {0, 0};
 
 Compiler::Compiler() {
   prog_ = new Prog();

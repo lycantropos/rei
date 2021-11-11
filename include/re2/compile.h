@@ -67,8 +67,6 @@ struct PatchList {
   uint32_t tail;  // for constant-time append
 };
 
-static const PatchList kNullPatchList = {0, 0};
-
 // Compiled program fragment.
 struct Frag {
   uint32_t begin;
@@ -211,7 +209,6 @@ class Compiler : public Regexp::Walker<Frag> {
   Compiler(const Compiler&) = delete;
   Compiler& operator=(const Compiler&) = delete;
 };
-
 }  // namespace re2
 
-#endif  // RE2_BITMAP256_H_
+#endif  // RE2_COMPILE_H_
