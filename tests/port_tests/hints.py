@@ -7,6 +7,7 @@ from rei.options import Options as PortedOptions
 from rei.parse_flag import ParseFlag as PortedParseFlag
 from rei.parse_state import ParseState as PortedParseState
 from rei.rune import Rune as PortedRune
+from rei.rune_range import RuneRange as PortedRuneRange
 from rei.status import Status as PortedStatus
 from rei.status_code import StatusCode as PortedStatusCode
 
@@ -19,5 +20,6 @@ PortedOptions = PortedOptions
 PortedParseFlag = PortedParseFlag
 PortedParseState = PortedParseState
 PortedRune = PortedRune
+PortedRuneRange = PortedRuneRange
 PortedStatus = PortedStatus
 PortedStatusCode = PortedStatusCode

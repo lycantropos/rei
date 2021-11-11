@@ -7,6 +7,7 @@ from tests.binding_tests.hints import (BoundCannedOption,
                                        BoundParseFlag,
                                        BoundParseState,
                                        BoundRune,
+                                       BoundRuneRange,
                                        BoundStatus,
                                        BoundStatusCode)
 from tests.integration_tests.hints import (BoundPortedCannedOptionsPair,
@@ -20,6 +21,7 @@ from tests.port_tests.hints import (PortedCannedOption,
                                     PortedParseFlag,
                                     PortedParseState,
                                     PortedRune,
+                                    PortedRuneRange,
                                     PortedStatus,
                                     PortedStatusCode)
 
@@ -27,6 +29,12 @@ from tests.port_tests.hints import (PortedCannedOption,
 def are_bound_ported_runes_equivalent(bound: BoundRune,
                                       ported: PortedRune) -> bool:
     return bound.components == ported.components
+
+
+def are_bound_ported_rune_ranges_equivalent(bound: BoundRuneRange,
+                                            ported: PortedRuneRange) -> bool:
+    return (are_bound_ported_runes_equivalent(bound.low, ported.low)
+            and are_bound_ported_runes_equivalent(bound.high, ported.high))
 
 
 def are_bound_ported_statuses_equivalent(bound: BoundStatus,
