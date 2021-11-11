@@ -1,5 +1,7 @@
 from typing import Optional
 
+from reprit.base import generate_repr
+
 from .consts import MAX_RUNE_VALUE
 from .mask import (Bits,
                    Bound,
@@ -9,11 +11,13 @@ from .mask import (Bits,
 class Rune:
     __slots__ = '_value',
 
-    def __new__(cls, characters: bytes) -> 'Rune':
-        value = characters_to_rune_value(characters)
+    def __new__(cls, components: bytes) -> 'Rune':
+        value = characters_to_rune_value(components)
         self = super().__new__(cls)
         self._value = value
         return self
+
+    __repr__ = generate_repr(__new__)
 
     def __lt__(self, other: 'Rune') -> bool:
         return (self._value < other._value
