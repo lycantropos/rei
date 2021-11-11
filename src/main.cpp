@@ -523,7 +523,7 @@ PYBIND11_MODULE(MODULE_NAME, m) {
 
   py::class_<RuneRange>(m, RUNE_RANGE_NAME)
       .def(py::init())
-      .def(py::init<Rune, Rune>([](const Rune& low, const Rune& high) {
+      .def(py::init([](const Rune& low, const Rune& high) {
              return RuneRange(low.raw(), high.raw());
            }),
            py::arg("low"), py::arg("high"))
