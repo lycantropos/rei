@@ -82,6 +82,8 @@ class Rune {
     return result;
   }
 
+  re2::Rune raw() const { return _raw; }
+
  private:
   re2::Rune _raw;
 };
@@ -521,7 +523,10 @@ PYBIND11_MODULE(MODULE_NAME, m) {
 
   py::class_<RuneRange>(m, RUNE_RANGE_NAME)
       .def(py::init())
-      .def(py::init<int, int>(), py::arg("low"), py::arg("high"))
+      .def(py::init<Rune, Rune>([](const Rune& low, const Rune& high) {
+             return RuneRange(low.raw(), high.raw());
+           }),
+           py::arg("low"), py::arg("high"))
       .def(
           "__lt__",
           [](const RuneRange& self, const RuneRange& other) {
