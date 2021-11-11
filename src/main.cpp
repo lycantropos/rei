@@ -16,6 +16,7 @@ namespace py = pybind11;
 #define C_STR(a) C_STR_HELPER(a)
 #define ANCHOR_NAME "Anchor"
 #define CANNED_OPTION_NAME "CannedOption"
+#define CHAR_CLASS_BUILDER_NAME "CharClassBuilder"
 #define ENCODING_NAME "Encoding"
 #define EXPRESSION_NAME "Expression"
 #define INSTRUCTION_NAME "Instruction"
@@ -35,6 +36,7 @@ namespace py = pybind11;
 
 using Anchor = re2::RE2::Anchor;
 using CannedOption = re2::RE2::CannedOptions;
+using CharClassBuilder = re2::CharClassBuilder;
 using Encoding = re2::RE2::Options::Encoding;
 using Expression = re2::RE2;
 using Instruction = re2::Prog::Inst;
@@ -361,6 +363,8 @@ PYBIND11_MODULE(MODULE_NAME, m) {
       .value("LATIN_1", CannedOption::Latin1)
       .value("POSIX", CannedOption::POSIX)
       .value("QUIET", CannedOption::Quiet);
+
+  py::class_<CharClassBuilder>(m, CHAR_CLASS_BUILDER_NAME).def(py::init());
 
   py::enum_<Encoding>(m, ENCODING_NAME)
       .value("UTF_8", Encoding::EncodingUTF8)
