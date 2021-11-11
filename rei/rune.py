@@ -24,6 +24,9 @@ class Rune:
                 if isinstance(other, Rune)
                 else NotImplemented)
 
+    def __len__(self) -> int:
+        return len(self.components)
+
     def __lt__(self, other: 'Rune') -> bool:
         return (self._value < other._value
                 if isinstance(other, Rune)
