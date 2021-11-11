@@ -351,16 +351,16 @@ PYBIND11_MODULE(MODULE_NAME, m) {
   m.doc() = R"pbdoc(Python binding of `re2` C++ library.)pbdoc";
   m.attr("__version__") = C_STR(VERSION_INFO);
 
+  py::enum_<Anchor>(m, ANCHOR_NAME)
+      .value("NONE", Anchor::UNANCHORED)
+      .value("START", Anchor::ANCHOR_START)
+      .value("BOTH", Anchor::ANCHOR_BOTH);
+
   py::enum_<CannedOption>(m, CANNED_OPTION_NAME)
       .value("DEFAULT", CannedOption::DefaultOptions)
       .value("LATIN_1", CannedOption::Latin1)
       .value("POSIX", CannedOption::POSIX)
       .value("QUIET", CannedOption::Quiet);
-
-  py::enum_<Anchor>(m, ANCHOR_NAME)
-      .value("NONE", Anchor::UNANCHORED)
-      .value("START", Anchor::ANCHOR_START)
-      .value("BOTH", Anchor::ANCHOR_BOTH);
 
   py::enum_<Encoding>(m, ENCODING_NAME)
       .value("UTF_8", Encoding::EncodingUTF8)
