@@ -13,6 +13,7 @@ from tests.binding_tests.hints import (BoundCannedOption,
 from tests.integration_tests.hints import (BoundPortedCannedOptionsPair,
                                            BoundPortedEncodingsPair,
                                            BoundPortedParseFlagsPair,
+                                           BoundPortedRuneRangesPair,
                                            BoundPortedRunesPair,
                                            BoundPortedStatusCodesPair)
 from tests.port_tests.hints import (PortedCannedOption,
@@ -87,6 +88,15 @@ def to_bound_with_ported_encodings_pair(value: int
 
 def to_bound_with_ported_runes_pair(characters: bytes) -> BoundPortedRunesPair:
     return BoundRune(characters), PortedRune(characters)
+
+
+def to_bound_with_ported_rune_ranges_pair(lows_pair: BoundPortedRunesPair,
+                                          highs_pair: BoundPortedRunesPair
+                                          ) -> BoundPortedRuneRangesPair:
+    bound_low, ported_low = lows_pair
+    bound_high, ported_high = highs_pair
+    return (BoundRuneRange(bound_low, bound_high),
+            PortedRuneRange(ported_low, ported_high))
 
 
 def to_bound_with_ported_status_codes_pair(value: int
