@@ -26,6 +26,7 @@ namespace py = pybind11;
 #define PROGRAM_NAME "Program"
 #define REGEXP_NAME "Regexp"
 #define RUNE_NAME "Rune"
+#define RUNE_RANGE_NAME "RuneRange"
 #define STATUS_NAME "Status"
 #define STATUS_CODE_NAME "StatusCode"
 #ifndef VERSION_INFO
@@ -46,9 +47,11 @@ using Regexp = re2::Regexp;
 
 class Rune {
  public:
-  Rune(const py::bytes& components) {
+  explicit Rune(const py::bytes& components) {
     re2::chartorune(&_raw, std::string(components).c_str());
   }
+
+  explicit Rune(re2::Rune raw) : _raw(raw) {}
 
   bool operator==(const Rune& other) const { return _raw == other._raw; }
 
@@ -81,6 +84,7 @@ class Rune {
   re2::Rune _raw;
 };
 
+using RuneRange = re2::RuneRange;
 using Status = re2::RegexpStatus;
 using StatusCode = re2::RegexpStatusCode;
 using StringPiece = re2::StringPiece;
@@ -511,6 +515,21 @@ PYBIND11_MODULE(MODULE_NAME, m) {
       .def("__repr__", repr<Rune>)
       .def("__str__", &Rune::operator py::str)
       .def_property_readonly("components", &Rune::components);
+
+  py::class_<RuneRange>(m, RUNE_RANGE_NAME)
+      .def(py::init())
+      .def(py::init<int, int>(), py::arg("low"), py::arg("high"))
+      .def(
+          "__lt__",
+          [](const RuneRange& self, const RuneRange& other) {
+            static re2::RuneRangeLess comparator;
+            return comparator(self, other);
+          },
+          py::is_operator())
+      .def_property_readonly(
+          "low", [](const RuneRange& self) { return Rune(self.lo); })
+      .def_property_readonly(
+          "high", [](const RuneRange& self) { return Rune(self.hi); });
 
   py::enum_<StatusCode> PyStatusCode(m, STATUS_CODE_NAME);
   PyStatusCode.value("SUCCESS", StatusCode::kRegexpSuccess)
