@@ -777,24 +777,36 @@ typedef std::set<RuneRange, RuneRangeLess> RuneRangeSet;
 
 class CharClassBuilder {
  public:
+  using iterator = RuneRangeSet::const_iterator;
+
   CharClassBuilder();
 
-  typedef RuneRangeSet::iterator iterator;
-  iterator begin() { return ranges_.begin(); }
-  iterator end() { return ranges_.end(); }
+  iterator begin() const { return ranges_.begin(); }
 
-  int size() { return nrunes_; }
-  bool empty() { return nrunes_ == 0; }
-  bool full() { return nrunes_ == Runemax + 1; }
+  iterator end() const { return ranges_.end(); }
 
-  bool Contains(Rune r);
-  bool FoldsASCII();
+  int size() const { return nrunes_; }
+
+  bool empty() const { return nrunes_ == 0; }
+
+  bool full() const { return nrunes_ == Runemax + 1; }
+
+  bool Contains(Rune r) const;
+
+  bool FoldsASCII() const;
+
   bool AddRange(Rune lo, Rune hi);  // returns whether class changed
-  CharClassBuilder* Copy();
+
+  CharClassBuilder* Copy() const;
+
   void AddCharClass(CharClassBuilder* cc);
+
   void Negate();
+
   void RemoveAbove(Rune r);
-  CharClass* GetCharClass();
+
+  CharClass* GetCharClass() const;
+
   void AddRangeFlags(Rune lo, Rune hi, Regexp::ParseFlags parse_flags);
 
  private:

@@ -790,16 +790,16 @@ void CharClassBuilder::AddCharClass(CharClassBuilder* cc) {
     AddRange(it->lo, it->hi);
 }
 
-bool CharClassBuilder::Contains(Rune r) {
+bool CharClassBuilder::Contains(Rune r) const {
   return ranges_.find(RuneRange(r, r)) != end();
 }
 
 // Does the character class behave the same on A-Z as on a-z?
-bool CharClassBuilder::FoldsASCII() {
+bool CharClassBuilder::FoldsASCII() const {
   return ((upper_ ^ lower_) & AlphaMask) == 0;
 }
 
-CharClassBuilder* CharClassBuilder::Copy() {
+CharClassBuilder* CharClassBuilder::Copy() const {
   CharClassBuilder* cc = new CharClassBuilder;
   for (iterator it = begin(); it != end(); ++it)
     cc->ranges_.insert(RuneRange(it->lo, it->hi));
@@ -928,7 +928,7 @@ bool CharClass::Contains(Rune r) {
   return false;
 }
 
-CharClass* CharClassBuilder::GetCharClass() {
+CharClass* CharClassBuilder::GetCharClass() const {
   CharClass* cc = CharClass::New(ranges_.size());
   int n = 0;
   for (iterator it = begin(); it != end(); ++it) cc->ranges_[n++] = *it;
