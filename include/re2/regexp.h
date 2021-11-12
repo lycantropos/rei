@@ -779,7 +779,7 @@ class CharClassBuilder {
  public:
   using iterator = RuneRangeSet::const_iterator;
 
-  CharClassBuilder();
+  CharClassBuilder() : upper_(0), lower_(0), nrunes_(0) {}
 
   iterator begin() const { return ranges_.begin(); }
 

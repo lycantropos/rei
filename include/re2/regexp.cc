@@ -718,12 +718,6 @@ bool Regexp::RequiredPrefixForAccel(std::string* prefix, bool* foldcase) {
 // ranges as equal if they overlap at all, so that
 // lookups for a particular Rune are possible.
 
-CharClassBuilder::CharClassBuilder() {
-  nrunes_ = 0;
-  upper_ = 0;
-  lower_ = 0;
-}
-
 // Add lo-hi to the class; return whether class got bigger.
 bool CharClassBuilder::AddRange(Rune lo, Rune hi) {
   if (hi < lo) return false;
