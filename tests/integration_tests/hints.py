@@ -2,12 +2,14 @@ from typing import (List,
                     Tuple)
 
 from tests.binding_tests.hints import (BoundCannedOption,
+                                       BoundCharClassBuilder,
                                        BoundEncoding,
                                        BoundParseFlag,
                                        BoundRune,
                                        BoundRuneRange,
                                        BoundStatusCode)
 from tests.port_tests.hints import (PortedCannedOption,
+                                    PortedCharClassBuilder,
                                     PortedEncoding,
                                     PortedParseFlag,
                                     PortedRune,
@@ -15,6 +17,8 @@ from tests.port_tests.hints import (PortedCannedOption,
                                     PortedStatusCode)
 
 BoundPortedCannedOptionsPair = Tuple[BoundCannedOption, PortedCannedOption]
+BoundPortedCharClassBuildersPair = Tuple[BoundCharClassBuilder,
+                                         PortedCharClassBuilder]
 BoundPortedEncodingsPair = Tuple[BoundEncoding, PortedEncoding]
 BoundPortedStatusCodesPair = Tuple[BoundStatusCode, PortedStatusCode]
 BoundPortedParseFlagsPair = Tuple[BoundParseFlag, PortedParseFlag]

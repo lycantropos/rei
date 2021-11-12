@@ -12,8 +12,10 @@ from tests.binding_tests.hints import (BoundCannedOption,
                                        BoundStatus,
                                        BoundStatusCode)
 from tests.integration_tests.hints import (BoundPortedCannedOptionsPair,
+                                           BoundPortedCharClassBuildersPair,
                                            BoundPortedEncodingsPair,
                                            BoundPortedParseFlagsPair,
+                                           BoundPortedRuneRangeListsPair,
                                            BoundPortedRuneRangesPair,
                                            BoundPortedRunesPair,
                                            BoundPortedStatusCodesPair)
@@ -84,6 +86,15 @@ def are_enumerations_equivalent(left: Type[Enum], right: Type[Enum]) -> bool:
             and left_members.keys() == right_members.keys()
             and all(left_value == right_members[name]
                     for name, left_value in left_members.items()))
+
+
+def to_bound_with_char_class_builders_pair(
+        rune_range_lists_pair: BoundPortedRuneRangeListsPair
+) -> BoundPortedCharClassBuildersPair:
+    bound_rune_ranges, ported_rune_ranges = rune_range_lists_pair
+
+    return (BoundCharClassBuilder(*bound_rune_ranges),
+            PortedCharClassBuilder(*ported_rune_ranges))
 
 
 def to_bound_with_ported_canned_options_pair(value: int
