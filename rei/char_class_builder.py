@@ -1,3 +1,4 @@
+from operator import eq
 from typing import Iterator
 
 from dendroid import red_black
@@ -23,7 +24,7 @@ class CharClassBuilder:
     __repr__ = generate_repr(__new__)
 
     def __eq__(self, other: 'CharClassBuilder') -> bool:
-        return (self._ranges == other._ranges
+        return (len(self) == len(other) and all(map(eq, self, other))
                 if isinstance(other, CharClassBuilder)
                 else NotImplemented)
 
