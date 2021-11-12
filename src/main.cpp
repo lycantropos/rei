@@ -5,6 +5,7 @@
 #include <re2/regexp.h>
 #include <util/utf.h>
 
+#include <functional>
 #include <numeric>
 #include <sstream>
 #include <string>
@@ -100,12 +101,32 @@ using Status = re2::RegexpStatus;
 using StatusCode = re2::RegexpStatusCode;
 using StringPiece = re2::StringPiece;
 
+template <class LeftIterator, class RightIterator>
+static bool are_iterators_equivalent(LeftIterator left_begin,
+                                     LeftIterator left_end,
+                                     RightIterator right_begin,
+                                     RightIterator right_end) {
+  for (; left_begin != left_end && right_begin != right_end;
+       ++left_begin, ++right_begin) {
+    if (!(*left_begin == *right_begin)) {
+      return false;
+    }
+  }
+  return left_begin == left_end && right_begin == right_end;
+}
+
 namespace re2 {
-bool operator==(const RuneRange& left, const RuneRange& right) {
+static bool operator==(const RuneRange& left, const RuneRange& right) {
   return left.lo == right.lo && left.hi == right.hi;
 }
 
-bool operator<(const RuneRange& left, const RuneRange& right) {
+static bool operator==(const CharClassBuilder& left,
+                       const CharClassBuilder& right) {
+  return ::are_iterators_equivalent(left.begin(), left.end(), right.begin(),
+                                    right.end());
+}
+
+static bool operator<(const RuneRange& left, const RuneRange& right) {
   static RuneRangeLess predicate;
   return predicate(left, right);
 }
@@ -401,6 +422,7 @@ PYBIND11_MODULE(MODULE_NAME, m) {
           result->AddRange(range.lo, range.hi);
         return result;
       }))
+      .def(py::self == py::self)
       .def("__bool__",
            [](const CharClassBuilder& self) { return !self.empty(); })
       .def("__iter__",
