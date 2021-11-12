@@ -564,7 +564,7 @@ PYBIND11_MODULE(MODULE_NAME, m) {
       .def("__str__", &Regexp::ToString);
 
   py::class_<Rune>(m, RUNE_NAME)
-      .def(py::init<const py::bytes&>(), py::arg("components"))
+      .def(py::init<const py::bytes&>(), py::arg("components") = py::bytes(""))
       .def(py::self == py::self)
       .def(py::self < py::self)
       .def("__bool__", &Rune::operator bool)
