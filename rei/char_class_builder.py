@@ -22,6 +22,11 @@ class CharClassBuilder:
 
     __repr__ = generate_repr(__new__)
 
+    def __eq__(self, other: 'CharClassBuilder') -> bool:
+        return (self._ranges == other._ranges
+                if isinstance(other, CharClassBuilder)
+                else NotImplemented)
+
     def __iter__(self) -> Iterator[RuneRange]:
         return iter(self._ranges)
 
