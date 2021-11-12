@@ -100,6 +100,12 @@ using Status = re2::RegexpStatus;
 using StatusCode = re2::RegexpStatusCode;
 using StringPiece = re2::StringPiece;
 
+namespace re2 {
+bool operator==(const RuneRange& left, const RuneRange& right) {
+  return left.lo == right.lo && left.hi == right.hi;
+}
+}  // namespace re2
+
 static Rune to_rune_range_high(const RuneRange& self) { return Rune(self.hi); }
 
 static Rune to_rune_range_low(const RuneRange& self) { return Rune(self.lo); }
@@ -588,12 +594,7 @@ PYBIND11_MODULE(MODULE_NAME, m) {
              return RuneRange(low.value(), high.value());
            }),
            py::arg("low"), py::arg("high"))
-      .def(
-          "__eq__",
-          [](const RuneRange& self, const RuneRange& other) {
-            return self.lo == other.lo && self.hi == other.hi;
-          },
-          py::is_operator())
+      .def(py::self == py::self)
       .def(
           "__lt__",
           [](const RuneRange& self, const RuneRange& other) {
