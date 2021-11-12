@@ -29,6 +29,11 @@ class Rune:
     def __int__(self) -> int:
         return self._value
 
+    def __le__(self, other: 'Rune') -> bool:
+        return (int(self) <= int(other)
+                if isinstance(other, Rune)
+                else NotImplemented)
+
     def __len__(self) -> int:
         return len(self.components)
 
