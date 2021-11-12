@@ -47,15 +47,14 @@ class CharClassBuilder:
             if lo1 <= hi1:
                 self._lower |= (((1 << (hi1 - lo1 + 1)) - 1)
                                 << (lo1 - Rune(b'a').value))
-        node = self._ranges.tree.find(RuneRange(low, low))
+        node = self._ranges.tree.find(RuneRange(low))
         if (node is not red_black.NIL
                 and node.value.low <= low
                 and high <= node.value.high):
             return False
         if low.value > 0:
             node = self._ranges.tree.find(
-                    RuneRange(Rune.from_value(low.value - 1),
-                              Rune.from_value(low.value - 1)))
+                    RuneRange(Rune.from_value(low.value - 1)))
             if node is not red_black.NIL:
                 low = node.value.low
                 if node.value.high > high:
@@ -65,8 +64,7 @@ class CharClassBuilder:
                 self._ranges.tree.remove(node)
         if high.value < MAX_RUNE_VALUE:
             node = self._ranges.tree.find(
-                    RuneRange(Rune.from_value(high.value + 1),
-                              Rune.from_value(high.value + 1)))
+                    RuneRange(Rune.from_value(high.value + 1)))
             if node is not red_black.NIL:
                 high = node.value.high
                 self._runes_count -= (node.value.high.value
