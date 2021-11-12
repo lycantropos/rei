@@ -1,3 +1,5 @@
+from typing import Optional
+
 from reprit.base import generate_repr
 
 from .rune import Rune
@@ -6,10 +8,10 @@ from .rune import Rune
 class RuneRange:
     __slots__ = '_low', '_high'
 
-    def __new__(cls, low: Rune, high: Rune) -> 'RuneRange':
+    def __new__(cls, low: Rune, high: Optional[Rune] = None) -> 'RuneRange':
         self = super().__new__(cls)
         self._low = low
-        self._high = high
+        self._high = low if high is None else high
         return self
 
     __repr__ = generate_repr(__new__)
