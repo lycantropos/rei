@@ -169,9 +169,7 @@ static void write_bool(std::ostream& stream, bool value) {
 }
 
 static void write_bytes(std::ostream& stream, const py::bytes& bytes) {
-  std::vector<py::str> components;
-  for (auto byte : py::iter(bytes)) components.push_back(py::str(byte));
-  stream << "bytes([" << join(components, ", ") << "])";
+  stream << std::string(py::str(bytes.attr("__repr__")()));
 }
 
 static std::ostream& operator<<(std::ostream& stream, const Rune& rune) {
