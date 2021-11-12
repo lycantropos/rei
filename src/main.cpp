@@ -365,7 +365,26 @@ PYBIND11_MODULE(MODULE_NAME, m) {
       .value("QUIET", CannedOption::Quiet);
 
   py::class_<CharClassBuilder>(m, CHAR_CLASS_BUILDER_NAME)
-      .def(py::init())
+      .def(py::init([](py::args args) {
+        std::vector<RuneRange> ranges;
+        ranges.reserve(args.size());
+        for (const auto& arg : args) {
+          try {
+            ranges.push_back(arg.cast<RuneRange>());
+          } catch (const py::cast_error&) {
+            throw py::type_error(
+                "Arguments should be \"" C_STR(
+                    MODULE_NAME) "." RUNE_RANGE_NAME
+                                 "\" instances, but got \"" +
+                py::type::of(arg).attr("__qualname__").cast<std::string>() +
+                "\".");
+          }
+        }
+        auto result = std::make_unique<CharClassBuilder>();
+        for (const RuneRange& range : ranges)
+          result->AddRange(range.lo, range.hi);
+        return result;
+      }))
       .def("__bool__",
            [](const CharClassBuilder& self) { return !self.empty(); })
       .def("__iter__",
