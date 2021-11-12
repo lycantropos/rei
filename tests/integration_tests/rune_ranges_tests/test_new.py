@@ -12,7 +12,7 @@ from . import strategies
 def test_single_argument(lows_pair: BoundPortedRunesPair) -> None:
     bound_low, ported_low = lows_pair
 
-    bound, ported = (BoundRuneRange(bound_low), PortedRuneRange(ported_low))
+    bound, ported = BoundRuneRange(bound_low), PortedRuneRange(ported_low)
 
     assert are_bound_ported_rune_ranges_equivalent(bound, ported)
 
