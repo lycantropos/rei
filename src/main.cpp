@@ -46,29 +46,29 @@ using ParseFlag = re2::Regexp::ParseFlags;
 using ParseState = re2::Regexp::ParseState;
 using Program = re2::Prog;
 using Regexp = re2::Regexp;
-
+using RuneValue = re2::Rune;
 class Rune {
  public:
   explicit Rune(const py::bytes& components) {
-    re2::chartorune(&_raw, std::string(components).c_str());
-    if (_raw == re2::Runeerror)
+    re2::chartorune(&_value, std::string(components).c_str());
+    if (value() == re2::Runeerror)
       throw py::value_error(
           "Invalid components: " + std::string(repr(components)) + ".");
   }
 
-  explicit Rune(re2::Rune raw) : _raw(raw) {}
+  explicit Rune(RuneValue value) : _value(value) {}
 
-  bool operator==(const Rune& other) const { return _raw == other._raw; }
+  bool operator==(const Rune& other) const { return value() == other.value(); }
 
-  bool operator<=(const Rune& other) const { return _raw <= other._raw; }
+  bool operator<=(const Rune& other) const { return value() <= other.value(); }
 
-  bool operator<(const Rune& other) const { return _raw < other._raw; }
+  bool operator<(const Rune& other) const { return value() < other.value(); }
 
-  explicit operator bool() const { return _raw != re2::Runeerror; }
+  explicit operator bool() const { return value() != re2::Runeerror; }
 
   explicit operator py::str() const {
     char* c_string = new char[re2::UTFmax]();
-    int size = re2::runetochar(c_string, &_raw);
+    int size = re2::runetochar(c_string, &_value);
     py::str result(c_string, size);
     delete[] c_string;
     return result;
@@ -76,23 +76,23 @@ class Rune {
 
   int size() const {
     char* c_string = new char[re2::UTFmax]();
-    int result = re2::runetochar(c_string, &_raw);
+    int result = re2::runetochar(c_string, &_value);
     delete[] c_string;
     return result;
   }
 
   py::bytes components() const {
     char* c_string = new char[re2::UTFmax]();
-    int size = re2::runetochar(c_string, &_raw);
+    int size = re2::runetochar(c_string, &_value);
     py::bytes result(c_string, size);
     delete[] c_string;
     return result;
   }
 
-  re2::Rune raw() const { return _raw; }
+  RuneValue value() const { return _value; }
 
  private:
-  re2::Rune _raw;
+  RuneValue _value;
 };
 
 using RuneRange = re2::RuneRange;
@@ -399,11 +399,11 @@ PYBIND11_MODULE(MODULE_NAME, m) {
       .def("__len__", &CharClassBuilder::size)
       .def("add_range",
            [](CharClassBuilder& self, const Rune& low, const Rune& high) {
-             return self.AddRange(low.raw(), high.raw());
+             return self.AddRange(low.value(), high.value());
            })
       .def("contains_rune",
            [](const CharClassBuilder& self, const Rune& rune) {
-             return self.Contains(rune.raw());
+             return self.Contains(rune.value());
            })
       .def_property_readonly("is_full", &CharClassBuilder::full);
 
@@ -581,7 +581,7 @@ PYBIND11_MODULE(MODULE_NAME, m) {
   py::class_<RuneRange>(m, RUNE_RANGE_NAME)
       .def(py::init())
       .def(py::init([](const Rune& low, const Rune& high) {
-             return RuneRange(low.raw(), high.raw());
+             return RuneRange(low.value(), high.value());
            }),
            py::arg("low"), py::arg("high"))
       .def(
