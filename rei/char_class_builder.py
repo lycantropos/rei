@@ -17,7 +17,7 @@ class CharClassBuilder:
         self._runes_count = 0
         self._ranges = red_black.set_()
         for range_ in _ranges:
-            self.add_range(range_.low, range_.high)
+            self.add_range(range_)
         return self
 
     __repr__ = generate_repr(__new__)
@@ -32,7 +32,8 @@ class CharClassBuilder:
     def runes_count(self) -> int:
         return self._runes_count
 
-    def add_range(self, low: Rune, high: Rune) -> bool:
+    def add_range(self, range_: RuneRange) -> bool:
+        low, high = range_.low, range_.high
         if high < low:
             return False
         if low <= Rune(b'z') and high >= Rune(b'A'):
