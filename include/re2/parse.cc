@@ -110,12 +110,12 @@ bool Regexp::ParseState::PushRegexp(Regexp* re) {
   // Similarly, [Aa] can be rewritten as a literal A with ASCII case folding.
   if (re->op_ == kRegexpCharClass && re->ccb_ != NULL) {
     re->ccb_->RemoveAbove(rune_max_);
-    if (re->ccb_->size() == 1) {
+    if (re->ccb_->runes_count() == 1) {
       Rune r = re->ccb_->begin()->lo;
       re->Decref();
       re = new Regexp(kRegexpLiteral, flags_);
       re->rune_ = r;
-    } else if (re->ccb_->size() == 2) {
+    } else if (re->ccb_->runes_count() == 2) {
       Rune r = re->ccb_->begin()->lo;
       if ('A' <= r && r <= 'Z' && re->ccb_->Contains(r + 'a' - 'A')) {
         re->Decref();

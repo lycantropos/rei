@@ -785,7 +785,7 @@ class CharClassBuilder {
 
   iterator end() const { return ranges_.end(); }
 
-  int size() const { return nrunes_; }
+  int runes_count() const { return nrunes_; }
 
   bool empty() const { return nrunes_ == 0; }
 
