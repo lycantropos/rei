@@ -151,23 +151,43 @@ static std::string join(const Iterable& elements,
                    });
 };
 
+template <class Iterator>
+static void write_separated(std::ostream& stream, const Iterator begin,
+                            const Iterator end, const std::string& separator) {
+  if (begin != end) {
+    stream << (*begin);
+    std::for_each(
+        std::next(begin), end,
+        [&separator, &stream](const typename Iterator::value_type& value) {
+          stream << separator << value;
+        });
+  }
+};
+
 static void write_bool(std::ostream& stream, bool value) {
   stream << (value ? "True" : "False");
 }
 
-static std::ostream& operator<<(std::ostream& stream, const py::bytes& bytes) {
+static void write_bytes(std::ostream& stream, const py::bytes& bytes) {
   std::vector<py::str> components;
   for (auto byte : py::iter(bytes)) components.push_back(py::str(byte));
-  return stream << "bytes([" << join(components, ", ") << "])";
+  stream << "bytes([" << join(components, ", ") << "])";
 }
 
-static std::ostream& operator<<(std::ostream& stream, const Encoding& value) {
+static std::ostream& operator<<(std::ostream& stream, const Rune& rune) {
+  stream << C_STR(MODULE_NAME) "." RUNE_NAME "(";
+  write_bytes(stream, rune.components());
+  return stream << ")";
+}
+
+namespace re2 {
+static std::ostream& operator<<(std::ostream& stream, ::Encoding value) {
   stream << C_STR(MODULE_NAME) "." ENCODING_NAME ".";
   switch (value) {
-    case Encoding::EncodingLatin1:
+    case ::Encoding::EncodingLatin1:
       stream << "LATIN_1";
       break;
-    case Encoding::EncodingUTF8:
+    case ::Encoding::EncodingUTF8:
       stream << "UTF_8";
       break;
     default:
@@ -177,7 +197,8 @@ static std::ostream& operator<<(std::ostream& stream, const Encoding& value) {
   return stream;
 }
 
-static std::ostream& operator<<(std::ostream& stream, const Options& options) {
+static std::ostream& operator<<(std::ostream& stream,
+                                const ::Options& options) {
   stream << C_STR(MODULE_NAME) "." OPTIONS_NAME "(" << options.encoding()
          << ", ";
   write_bool(stream, options.posix_syntax());
@@ -207,66 +228,67 @@ static std::ostream& operator<<(std::ostream& stream, const Options& options) {
 }
 
 static std::ostream& operator<<(std::ostream& stream,
-                                const Expression& expression) {
+                                const ::Expression& expression) {
   return stream << C_STR(MODULE_NAME) "." EXPRESSION_NAME "('"
                 << expression.pattern() << "', " << expression.options() << ")";
 }
 
-static std::ostream& operator<<(std::ostream& stream, const ParseFlag& value) {
+static std::ostream& operator<<(std::ostream& stream,
+                                const ::ParseFlag& value) {
   stream << C_STR(MODULE_NAME) "." STATUS_CODE_NAME ".";
   switch (value) {
-    case ParseFlag::NoParseFlags:
+    case ::ParseFlag::NoParseFlags:
       stream << "NO_PARSE_FLAGS";
       break;
-    case ParseFlag::FoldCase:
+    case ::ParseFlag::FoldCase:
       stream << "FOLD_CASE";
       break;
-    case ParseFlag::Literal:
+    case ::ParseFlag::Literal:
       stream << "LITERAL";
       break;
-    case ParseFlag::ClassNL:
+    case ::ParseFlag::ClassNL:
       stream << "CLASS_NL";
       break;
-    case ParseFlag::DotNL:
+    case ::ParseFlag::DotNL:
       stream << "DOT_NL";
       break;
-    case ParseFlag::MatchNL:
+    case ::ParseFlag::MatchNL:
       stream << "MATCH_NL";
       break;
-    case ParseFlag::OneLine:
+    case ::ParseFlag::OneLine:
       stream << "ONE_LINE";
       break;
-    case ParseFlag::Latin1:
+    case ::ParseFlag::Latin1:
       stream << "LATIN1";
       break;
-    case ParseFlag::NonGreedy:
+    case ::ParseFlag::NonGreedy:
       stream << "NON_GREEDY";
       break;
-    case ParseFlag::PerlClasses:
+    case ::ParseFlag::PerlClasses:
       stream << "PERL_CLASSES";
       break;
-    case ParseFlag::PerlB:
+    case ::ParseFlag::PerlB:
       stream << "PERL_B";
       break;
-    case ParseFlag::PerlX:
+    case ::ParseFlag::PerlX:
       stream << "PERL_X";
       break;
-    case ParseFlag::UnicodeGroups:
+    case ::ParseFlag::UnicodeGroups:
       stream << "UNICODE_GROUPS";
       break;
-    case ParseFlag::NeverNL:
+    case ::ParseFlag::NeverNL:
       stream << "NEVER_NL";
       break;
-    case ParseFlag::NeverCapture:
+    case ::ParseFlag::NeverCapture:
       stream << "NEVER_CAPTURE";
       break;
-    case ParseFlag::LikePerl:
+    case ::ParseFlag::LikePerl:
       stream << "LIKE_PERL";
       break;
-    case ParseFlag::WasDollar:
+    case ::ParseFlag::WasDollar:
       stream << "WAS_DOLLAR";
       break;
-    case ParseFlag::AllParseFlags:
+    case ::ParseFlag::AllParseFlags:
       stream << "ALL_PARSE_FLAGS";
       break;
     default:
@@ -276,69 +298,73 @@ static std::ostream& operator<<(std::ostream& stream, const ParseFlag& value) {
   return stream;
 }
 
-static std::ostream& operator<<(std::ostream& stream, const ParseState& state) {
+static std::ostream& operator<<(std::ostream& stream,
+                                const ::ParseState& state) {
   return stream << C_STR(MODULE_NAME) "." STATUS_NAME "(" << state.flags()
                 << ", '" << state.whole_regexp() << "')";
 }
 
-static std::ostream& operator<<(std::ostream& stream, const Rune& rune) {
-  return stream << C_STR(MODULE_NAME) "." RUNE_NAME "(" << rune.components()
-                << ")";
+static std::ostream& operator<<(std::ostream& stream,
+                                const ::RuneRange& rune_range) {
+  return stream << C_STR(MODULE_NAME) "." RUNE_RANGE_NAME "("
+                << ::to_rune_range_low(rune_range) << ", "
+                << ::to_rune_range_high(rune_range) << ")";
 }
 
 static std::ostream& operator<<(std::ostream& stream,
-                                const RuneRange& rune_range) {
-  return stream << C_STR(MODULE_NAME) "." RUNE_RANGE_NAME "("
-                << to_rune_range_low(rune_range) << ", "
-                << to_rune_range_high(rune_range) << ")";
+                                const ::CharClassBuilder& value) {
+  stream << C_STR(MODULE_NAME) "." CHAR_CLASS_BUILDER_NAME "(";
+  write_separated(stream, value.begin(), value.end(), ", ");
+  return stream << ")";
 }
 
-static std::ostream& operator<<(std::ostream& stream, const StatusCode& value) {
+static std::ostream& operator<<(std::ostream& stream,
+                                const ::StatusCode& value) {
   stream << C_STR(MODULE_NAME) "." STATUS_CODE_NAME ".";
   switch (value) {
-    case StatusCode::kRegexpSuccess:
+    case ::StatusCode::kRegexpSuccess:
       stream << "SUCCESS";
       break;
-    case StatusCode::kRegexpInternalError:
+    case ::StatusCode::kRegexpInternalError:
       stream << "INTERNAL_ERROR";
       break;
-    case StatusCode::kRegexpBadEscape:
+    case ::StatusCode::kRegexpBadEscape:
       stream << "BAD_ESCAPE";
       break;
-    case StatusCode::kRegexpBadCharClass:
+    case ::StatusCode::kRegexpBadCharClass:
       stream << "BAD_CHAR_CLASS";
       break;
-    case StatusCode::kRegexpBadCharRange:
+    case ::StatusCode::kRegexpBadCharRange:
       stream << "BAD_CHAR_RANGE";
       break;
-    case StatusCode::kRegexpMissingBracket:
+    case ::StatusCode::kRegexpMissingBracket:
       stream << "MISSING_BRACKET";
       break;
-    case StatusCode::kRegexpMissingParen:
+    case ::StatusCode::kRegexpMissingParen:
       stream << "MISSING_PAREN";
       break;
-    case StatusCode::kRegexpUnexpectedParen:
+    case ::StatusCode::kRegexpUnexpectedParen:
       stream << "UNEXPECTED_PAREN";
       break;
-    case StatusCode::kRegexpTrailingBackslash:
+    case ::StatusCode::kRegexpTrailingBackslash:
       stream << "TRAILING_BACKSLASH";
       break;
-    case StatusCode::kRegexpRepeatArgument:
+    case ::StatusCode::kRegexpRepeatArgument:
       stream << "REPEAT_ARGUMENT";
       break;
-    case StatusCode::kRegexpRepeatSize:
+    case ::StatusCode::kRegexpRepeatSize:
       stream << "REPEAT_SIZE";
       break;
-    case StatusCode::kRegexpRepeatOp:
+    case ::StatusCode::kRegexpRepeatOp:
       stream << "REPEAT_OP";
       break;
-    case StatusCode::kRegexpBadPerlOp:
+    case ::StatusCode::kRegexpBadPerlOp:
       stream << "BAD_PERL_OP";
       break;
-    case StatusCode::kRegexpBadUTF8:
+    case ::StatusCode::kRegexpBadUTF8:
       stream << "BAD_UTF8";
       break;
-    case StatusCode::kRegexpBadNamedCapture:
+    case ::StatusCode::kRegexpBadNamedCapture:
       stream << "BAD_NAMED_CAPTURE";
       break;
     default:
@@ -348,10 +374,11 @@ static std::ostream& operator<<(std::ostream& stream, const StatusCode& value) {
   return stream;
 }
 
-static std::ostream& operator<<(std::ostream& stream, const Status& status) {
+static std::ostream& operator<<(std::ostream& stream, const ::Status& status) {
   return stream << C_STR(MODULE_NAME) "." STATUS_NAME "(" << status.code()
                 << ", '" << status.error_arg() << "')";
 }
+}  // namespace re2
 
 template <class Object>
 std::string repr(const Object& object) {
@@ -430,6 +457,7 @@ PYBIND11_MODULE(MODULE_NAME, m) {
              return py::make_iterator(self.begin(), self.end());
            })
       .def("__len__", &CharClassBuilder::size)
+      .def("__repr__", repr<CharClassBuilder>)
       .def("add_range",
            [](CharClassBuilder& self, const RuneRange& range) {
              return self.AddRange(range.lo, range.hi);
