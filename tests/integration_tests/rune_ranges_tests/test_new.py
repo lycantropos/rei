@@ -8,6 +8,15 @@ from tests.port_tests.hints import PortedRuneRange
 from . import strategies
 
 
+@given(strategies.runes_pairs)
+def test_single_argument(lows_pair: BoundPortedRunesPair) -> None:
+    bound_low, ported_low = lows_pair
+
+    bound, ported = (BoundRuneRange(bound_low), PortedRuneRange(ported_low))
+
+    assert are_bound_ported_rune_ranges_equivalent(bound, ported)
+
+
 @given(strategies.runes_pairs, strategies.runes_pairs)
 def test_basic(lows_pair: BoundPortedRunesPair,
                highs_pair: BoundPortedRunesPair) -> None:
