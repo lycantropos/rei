@@ -376,7 +376,8 @@ PYBIND11_MODULE(MODULE_NAME, m) {
       .def("add_range",
            [](CharClassBuilder& self, const Rune& low, const Rune& high) {
              return self.AddRange(low.raw(), high.raw());
-           });
+           })
+      .def_property_readonly("is_full", &CharClassBuilder::full);
 
   py::enum_<Encoding>(m, ENCODING_NAME)
       .value("UTF_8", Encoding::EncodingUTF8)
