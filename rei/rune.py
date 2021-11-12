@@ -11,7 +11,7 @@ from .mask import (Bits,
 class Rune:
     __slots__ = '_value',
 
-    def __new__(cls, components: bytes) -> 'Rune':
+    def __new__(cls, components: bytes = b'') -> 'Rune':
         value = characters_to_rune_value(components)
         if value is None:
             raise ValueError(f'Invalid components: {components}.')
