@@ -15,22 +15,25 @@ class Rune:
         value = characters_to_rune_value(components)
         if value is None:
             raise ValueError(f'Invalid components: {components}.')
-        self = super().__new__(cls)
-        self._value = value
-        return self
+        return cls.from_value(value)
 
     __repr__ = generate_repr(__new__)
 
+    @classmethod
+    def from_value(cls, value: int) -> 'Rune':
+        assert (characters_to_rune_value(rune_value_to_characters(value))
+                is not None)
+        result = super().__new__(cls)
+        result._value = value
+        return result
+
     def __eq__(self, other: 'Rune') -> bool:
-        return (int(self) == int(other)
+        return (self.value == other.value
                 if isinstance(other, Rune)
                 else NotImplemented)
 
-    def __int__(self) -> int:
-        return self._value
-
     def __le__(self, other: 'Rune') -> bool:
-        return (int(self) <= int(other)
+        return (self.value <= other.value
                 if isinstance(other, Rune)
                 else NotImplemented)
 
@@ -38,13 +41,17 @@ class Rune:
         return len(self.components)
 
     def __lt__(self, other: 'Rune') -> bool:
-        return (int(self) < int(other)
+        return (self.value < other.value
                 if isinstance(other, Rune)
                 else NotImplemented)
 
     @property
     def components(self) -> bytes:
-        return rune_value_to_characters(int(self))
+        return rune_value_to_characters(self.value)
+
+    @property
+    def value(self) -> int:
+        return self._value
 
 
 def characters_to_rune_value(characters: bytes) -> Optional[int]:
