@@ -2,6 +2,7 @@ from enum import Enum
 from typing import Type
 
 from tests.binding_tests.hints import (BoundCannedOption,
+                                       BoundCharClassBuilder,
                                        BoundEncoding,
                                        BoundOptions,
                                        BoundParseFlag,
@@ -17,6 +18,7 @@ from tests.integration_tests.hints import (BoundPortedCannedOptionsPair,
                                            BoundPortedRunesPair,
                                            BoundPortedStatusCodesPair)
 from tests.port_tests.hints import (PortedCannedOption,
+                                    PortedCharClassBuilder,
                                     PortedEncoding,
                                     PortedOptions,
                                     PortedParseFlag,
@@ -25,6 +27,14 @@ from tests.port_tests.hints import (PortedCannedOption,
                                     PortedRuneRange,
                                     PortedStatus,
                                     PortedStatusCode)
+
+
+def are_bound_ported_char_class_builders_equivalent(
+        bound: BoundCharClassBuilder,
+        ported: PortedCharClassBuilder) -> bool:
+    return (len(bound) == len(ported)
+            and all(map(are_bound_ported_rune_ranges_equivalent, bound,
+                        ported)))
 
 
 def are_bound_ported_runes_equivalent(bound: BoundRune,

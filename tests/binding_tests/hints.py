@@ -1,5 +1,6 @@
 from _rei import (Anchor as BoundAnchor,
                   CannedOption as BoundCannedOption,
+                  CharClassBuilder as BoundCharClassBuilder,
                   Encoding as BoundEncoding,
                   Expression as BoundExpression,
                   Operation as BoundOperation,
@@ -13,6 +14,7 @@ from _rei import (Anchor as BoundAnchor,
 
 BoundAnchor = BoundAnchor
 BoundCannedOption = BoundCannedOption
+BoundCharClassBuilder = BoundCharClassBuilder
 BoundEncoding = BoundEncoding
 BoundExpression = BoundExpression
 BoundOperation = BoundOperation

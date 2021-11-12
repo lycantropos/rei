@@ -1,4 +1,5 @@
-from typing import Tuple
+from typing import (List,
+                    Tuple)
 
 from tests.binding_tests.hints import (BoundCannedOption,
                                        BoundEncoding,
@@ -19,3 +20,5 @@ BoundPortedStatusCodesPair = Tuple[BoundStatusCode, PortedStatusCode]
 BoundPortedParseFlagsPair = Tuple[BoundParseFlag, PortedParseFlag]
 BoundPortedRunesPair = Tuple[BoundRune, PortedRune]
 BoundPortedRuneRangesPair = Tuple[BoundRuneRange, PortedRuneRange]
+BoundPortedRuneRangeListsPair = Tuple[List[BoundRuneRange],
+                                      List[PortedRuneRange]]
