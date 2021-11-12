@@ -104,6 +104,11 @@ namespace re2 {
 bool operator==(const RuneRange& left, const RuneRange& right) {
   return left.lo == right.lo && left.hi == right.hi;
 }
+
+bool operator<(const RuneRange& left, const RuneRange& right) {
+  static RuneRangeLess predicate;
+  return predicate(left, right);
+}
 }  // namespace re2
 
 static Rune to_rune_range_high(const RuneRange& self) { return Rune(self.hi); }
@@ -595,13 +600,7 @@ PYBIND11_MODULE(MODULE_NAME, m) {
            }),
            py::arg("low"), py::arg("high"))
       .def(py::self == py::self)
-      .def(
-          "__lt__",
-          [](const RuneRange& self, const RuneRange& other) {
-            static re2::RuneRangeLess comparator;
-            return comparator(self, other);
-          },
-          py::is_operator())
+      .def(py::self < py::self)
       .def("__repr__", repr<RuneRange>)
       .def_property_readonly("high", &to_rune_range_high)
       .def_property_readonly("low", &to_rune_range_low);
