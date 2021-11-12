@@ -13,6 +13,8 @@ class Rune:
 
     def __new__(cls, components: bytes) -> 'Rune':
         value = characters_to_rune_value(components)
+        if value is None:
+            raise ValueError(f'Invalid components: {components}.')
         self = super().__new__(cls)
         self._value = value
         return self
