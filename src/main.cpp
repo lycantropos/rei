@@ -52,7 +52,8 @@ class Rune {
   explicit Rune(const py::bytes& components) {
     re2::chartorune(&_raw, std::string(components).c_str());
     if (_raw == re2::Runeerror)
-      throw py::value_error("Invalid components: " + repr(components) + ".");
+      throw py::value_error(
+          "Invalid components: " + std::string(repr(components)) + ".");
   }
 
   explicit Rune(re2::Rune raw) : _raw(raw) {}
