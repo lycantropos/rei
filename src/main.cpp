@@ -398,8 +398,8 @@ PYBIND11_MODULE(MODULE_NAME, m) {
            })
       .def("__len__", &CharClassBuilder::size)
       .def("add_range",
-           [](CharClassBuilder& self, const Rune& low, const Rune& high) {
-             return self.AddRange(low.value(), high.value());
+           [](CharClassBuilder& self, const RuneRange& range) {
+             return self.AddRange(range.lo, range.hi);
            })
       .def("contains_rune",
            [](const CharClassBuilder& self, const Rune& rune) {
