@@ -22,21 +22,24 @@ class Rune:
     __repr__ = generate_repr(__new__)
 
     def __eq__(self, other: 'Rune') -> bool:
-        return (self._value == other._value
+        return (int(self) == int(other)
                 if isinstance(other, Rune)
                 else NotImplemented)
+
+    def __int__(self) -> int:
+        return self._value
 
     def __len__(self) -> int:
         return len(self.components)
 
     def __lt__(self, other: 'Rune') -> bool:
-        return (self._value < other._value
+        return (int(self) < int(other)
                 if isinstance(other, Rune)
                 else NotImplemented)
 
     @property
     def components(self) -> bytes:
-        return rune_value_to_characters(self._value)
+        return rune_value_to_characters(int(self))
 
 
 def characters_to_rune_value(characters: bytes) -> Optional[int]:
