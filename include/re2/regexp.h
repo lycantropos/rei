@@ -785,6 +785,8 @@ class CharClassBuilder {
 
   iterator end() const { return ranges_.end(); }
 
+  std::size_t size() const { return ranges_.size(); }
+
   int runes_count() const { return nrunes_; }
 
   bool empty() const { return nrunes_ == 0; }
