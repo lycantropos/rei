@@ -368,6 +368,10 @@ PYBIND11_MODULE(MODULE_NAME, m) {
       .def(py::init())
       .def("__bool__",
            [](const CharClassBuilder& self) { return !self.empty(); })
+      .def("__iter__",
+           [](const CharClassBuilder& self) {
+             return py::make_iterator(self.begin(), self.end());
+           })
       .def("__len__", &CharClassBuilder::size)
       .def("add_range",
            [](CharClassBuilder& self, const Rune& low, const Rune& high) {
